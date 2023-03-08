@@ -13,7 +13,7 @@ variables:
 steps:
 # install the required .NET Core SDK version
 # only necessary if the agent doesn't already have the required SDK
-- task: UseDotNet@2
+- task: DotNetCoreInstaller@0
   displayName: 'Use .NET Core sdk 2.2.301'
   inputs:
     version: 3.1.4 
