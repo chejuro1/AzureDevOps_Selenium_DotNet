@@ -14,9 +14,9 @@ steps:
 # install the required .NET Core SDK version
 # only necessary if the agent doesn't already have the required SDK
 - task: DotNetCoreInstaller@0
-  displayName: 'Use .NET Core sdk 2.2.x'
+  displayName: 'Use .NET Core sdk 2.2.207'
   inputs:
-    version: 2.2.x
+    version: 2.2.207
 
 # - task: UseDotNet@2
 #   inputs:
