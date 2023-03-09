@@ -48,7 +48,7 @@ namespace Demo.SeleniumTests
                 options.AddArgument("headless");
             }
 
-            return new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), options);
+            return new ChromeDriver(Path.GetDirectoryName(), options);
         }
     }
 }
