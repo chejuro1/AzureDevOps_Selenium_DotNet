@@ -5,7 +5,8 @@ trigger:
 # use a Windows agent with VS to build the .NET Core MSTest project
 # you can replace this with Ubuntu too without changing the tasks
 pool:
-  name: Hosted Windows 2019 with VS2019
+  # name: Hosted Windows 2019 with VS2019
+  name: Windows-latest
 
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
