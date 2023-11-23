@@ -19,8 +19,15 @@ steps:
 #   displayName: 'Use .NET Core sdk 2.2.301'
 #   inputs:
 #     version: 2.2.301
-
-# restore Nuget packages/dependencies
+- task: NuGetToolInstaller@1
+  inputs:
+   checkLatest: false
+- task: NuGetCommand@2
+  displayName: NuGet v2 Restore
+  inputs:
+    command: restore                      
+    restoreSolution: '**/*.sln'   
+#restore Nuget packages/dependencies
 # - task: DotNetCoreCLI@2
 #   displayName: Restore
 #   inputs:
