@@ -5,7 +5,9 @@ trigger:
 # use a Windows agent with VS to build the .NET Core MSTest project
 # you can replace this with Ubuntu too without changing the tasks
 pool:
-  name: Hosted Windows 2019 with VS2019
+  # name: Hosted Windows 2019 with VS2019
+  name: Azure Pipelines
+  vmImage: windows-latest
 
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -13,12 +15,19 @@ variables:
 steps:
 # install the required .NET Core SDK version
 # only necessary if the agent doesn't already have the required SDK
-- task: DotNetCoreInstaller@0
-  displayName: 'Use .NET Core sdk 2.2.301'
+# - task: DotNetCoreInstaller@0
+#   displayName: 'Use .NET Core sdk 2.2.301'
+#   inputs:
+#     version: 2.2.301
+- task: NuGetToolInstaller@1
   inputs:
-    version: 2.2.301
-
-# restore Nuget packages/dependencies
+   checkLatest: false
+- task: NuGetCommand@2
+  displayName: NuGet v2 Restore
+  inputs:
+    command: restore                      
+    restoreSolution: '**/*.sln'   
+#restore Nuget packages/dependencies
 # - task: DotNetCoreCLI@2
 #   displayName: Restore
 #   inputs:
