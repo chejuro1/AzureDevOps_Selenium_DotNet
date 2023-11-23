@@ -13,34 +13,35 @@ variables:
 steps:
 # install the required .NET Core SDK version
 # only necessary if the agent doesn't already have the required SDK
-# - task: DotNetCoreInstaller@0
-#   displayName: 'Use .NET Core sdk 2.2.301'
-#   inputs:
-#     version: 2.2.301
+- task: DotNetCoreInstaller@0
+  displayName: 'Use .NET Core sdk 2.2.301'
+  inputs:
+    version: 2.2.301
 
-- task: UseDotNet@2
-  inputs:
-      version: '3.0.103'
-      includePreviewVersions: true
-      performMultiLevelLookup: true
 # restore Nuget packages/dependencies
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: restore
-    projects: '**/Demo.SeleniumTests.csproj'
+# - task: DotNetCoreCLI@2
+#   displayName: Restore
+#   inputs:
+#     command: restore
+#     projects: '**/Demo.SeleniumTests.csproj'
 
 # publish the UI test project to the SeleliumTest subfolder in the Artifact Staging Directory
 # optionally, you can add more steps to publish your own website alongside your SeleniumTests in another task
-- task: DotNetCoreCLI@2
-  displayName: Publish
+# - task: DotNetCoreCLI@2
+#   displayName: Publish
+#   inputs:
+#     command: publish
+#     publishWebProjects: false
+#     projects: '**/Demo.SeleniumTests.csproj'
+#     arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTests'
+#     zipAfterPublish: false
+#     modifyOutputPath: false
+- task: VSBuild@1
   inputs:
-    command: publish
-    publishWebProjects: false
-    projects: '**/Demo.SeleniumTests.csproj'
-    arguments: '--configuration Release -o $(build.artifactstagingdirectory)'
-    zipAfterPublish: false
-    modifyOutputPath: false
+    solution: '**/AzureDevOps_Selenium_DotNet.sln'
+    configuration:  'Any CPU'
+    platform:  'release'
+    
 
 # publish all artifacts in the Artifact Stagign Directory
 # this will place the UI Test artifacts in Azure DevOps for future use in the deployment pipeline
