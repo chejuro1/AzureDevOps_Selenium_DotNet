@@ -6,7 +6,7 @@ trigger:
 # you can replace this with Ubuntu too without changing the tasks
 pool:
   # name: Hosted Windows 2019 with VS2019
-  name: Windows-latest
+  name: windows-latest
 
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
