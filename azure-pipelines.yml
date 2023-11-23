@@ -39,8 +39,8 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '**/AzureDevOps_Selenium_DotNet.sln'
-    configuration:  'Any CPU'
-    platform:  'release'
+    # configuration:  'Any CPU'
+    # platform:  'release'
     
 
 # publish all artifacts in the Artifact Stagign Directory
