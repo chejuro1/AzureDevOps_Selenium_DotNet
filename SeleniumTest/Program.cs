@@ -13,8 +13,12 @@ namespace SeleniumTest
         [SetUp]
         public void Setup()
         {
-            // Initialize the ChromeDriver
-            driver = new ChromeDriver();
+            // Set up Chrome options for headless mode
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.AddArgument("--headless");
+
+            // Initialize ChromeDriver with options
+            driver = new ChromeDriver(chromeOptions);
         }
 
         [Test]
