@@ -19,29 +19,29 @@ steps:
 - task: NuGetCommand@2
   displayName: NuGet v2 Restore
 
-# restore Nuget packages/dependencies
-# - task: DotNetCoreCLI@2
-#   displayName: Restore
-#   inputs:
-#     command: restore
-#     projects: '**/Demo.SeleniumTests.csproj'   1
+
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: '**/SeleniumTest.csproj'   
 
 # publish the UI test project to the SeleliumTest subfolder in the Artifact Staging Directory
 # optionally, you can add more steps to publish your own website alongside your SeleniumTests in another task
-# - task: DotNetCoreCLI@2
-#   displayName: Publish
-#   inputs:
-#     command: publish
-#     publishWebProjects: false
-#     projects: '**/Demo.SeleniumTests.csproj'
-#     arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTests'
-#     zipAfterPublish: false
-#     modifyOutputPath: false
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
+  displayName: Publish
   inputs:
-    solution: '**/AzureDevOps_Selenium_DotNet.sln'
-    # configuration:  'Any CPU'
-    # platform:  'release'
+    command: publish
+    publishWebProjects: false
+    projects: '**/SeleniumTest.csproj'
+    arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTest'
+    zipAfterPublish: false
+    modifyOutputPath: false
+# - task: VSBuild@1
+#   inputs:
+#     solution: '**/AzureDevOps_Selenium_DotNet.sln'
+#     # configuration:  'Any CPU'
+#     # platform:  'release'
     
 
 # publish all artifacts in the Artifact Stagign Directory
