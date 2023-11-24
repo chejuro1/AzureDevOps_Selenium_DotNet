@@ -8,8 +8,9 @@ namespace SeleniumTest
     [TestFixture]
     class Program
     {
-        IWebDriver driver;
-
+        IWebDriver driver = null;
+        
+   
         [SetUp]
         public void Setup()
         {
@@ -19,7 +20,12 @@ namespace SeleniumTest
 
             // Initialize ChromeDriver with options
             driver = new ChromeDriver(chromeOptions);
+
         }
+
+
+
+
 
         [Test]
         public void TestCase1()
@@ -68,9 +74,12 @@ namespace SeleniumTest
         public void TearDown()
         {
             // Close the browser
-            driver.Close();
+           
+            driver.Quit();
         }
-
-        
+               
+         
     }
+
+
 }
