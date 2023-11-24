@@ -67,9 +67,6 @@ namespace SeleniumTest
             driver.Close();
         }
 
-        static void Main(string[] args)
-        {
-            Console.WriteLine("This is a Selenium test!");
-        }
+        
     }
 }
