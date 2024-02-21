@@ -54,7 +54,7 @@ stages:
             inputs:
               testSelector: 'testAssemblies'
               testAssemblyVer2: |
-                **\*test*.dll
+                **\*SeleniumTest*.dll
                 !**\*TestAdapter.dll
                 !**\obj\**
               searchFolder: '$(System.DefaultWorkingDirectory)/SeleniumTest'
