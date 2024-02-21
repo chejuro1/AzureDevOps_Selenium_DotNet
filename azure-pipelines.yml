@@ -49,6 +49,13 @@ stages:
     jobs:
       - job: RunTests
         steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.DefaultWorkingDirectory)/SeleniumTest'
+
           - task: VSTest@2
             displayName: 'Run Visual Studio Tests'
             inputs:
