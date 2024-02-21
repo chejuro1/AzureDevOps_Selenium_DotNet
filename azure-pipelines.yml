@@ -1,53 +1,62 @@
 # any commit to the master branch will trigger the CI build
 trigger:
-- master
+  - master
 
 # use a Windows agent with VS to build the .NET Core MSTest project
 # you can replace this with Ubuntu too without changing the tasks
 pool:
   name: Azure Pipelines
   vmImage: windows-latest
+
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
-steps:
-# install the required .NET Core SDK version
-# only necessary if the agent doesn't already have the required SDK
-- task: NuGetToolInstaller@1
-  inputs:
-   checkLatest: false
-- task: NuGetCommand@2
-  displayName: NuGet v2 Restore
+stages:
+  - stage: CI
+    jobs:
+      - job: Build
+        steps:
+          - task: NuGetToolInstaller@1
+            inputs:
+              checkLatest: false
 
+          - task: NuGetCommand@2
+            displayName: NuGet v2 Restore
 
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: restore
-    projects: '**/SeleniumTest.csproj'   
+          - task: DotNetCoreCLI@2
+            displayName: Restore
+            inputs:
+              command: restore
+              projects: '**/SeleniumTest.csproj'
 
-# publish the UI test project to the SeleliumTest subfolder in the Artifact Staging Directory
-# optionally, you can add more steps to publish your own website alongside your SeleniumTests in another task
-- task: DotNetCoreCLI@2
-  displayName: Publish
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: '**/SeleniumTest.csproj'
-    arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTest'
-    zipAfterPublish: false
-    modifyOutputPath: false
-# - task: VSBuild@1
-#   inputs:
-#     solution: '**/AzureDevOps_Selenium_DotNet.sln'
-#     # configuration:  'Any CPU'
-#     # platform:  'release'
-    
+          - task: DotNetCoreCLI@2
+            displayName: Publish
+            inputs:
+              command: publish
+              publishWebProjects: false
+              projects: '**/SeleniumTest.csproj'
+              arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTest'
+              zipAfterPublish: false
+              modifyOutputPath: false
 
-# publish all artifacts in the Artifact Stagign Directory
-# this will place the UI Test artifacts in Azure DevOps for future use in the deployment pipeline
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
-  condition: succeededOrFailed()
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact'
+            inputs:
+              PathtoPublish: '$(build.artifactstagingdirectory)'
+            condition: succeededOrFailed()
+
+  - stage: qac
+    jobs:
+      - job: RunTests
+        steps:
+          - task: VSTest@2
+            displayName: 'Run Visual Studio Tests'
+            inputs:
+              testSelector: 'testAssemblies'
+              testAssemblyVer2: |
+                **\*test*.dll
+                !**\*TestAdapter.dll
+                !**\obj\**
+              searchFolder: '$(System.DefaultWorkingDirectory)/SeleniumTest'
+              codeCoverageEnabled: true
+              runInParallel: true
