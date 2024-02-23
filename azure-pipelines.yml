@@ -104,8 +104,8 @@ stages:
               $updatedef = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"}
 
               write-host "==========================================================" 
-              Write-host "The value of Varialbe 'Test' is updated to" $updatedef.variables.Test.value
+              Write-host "The value of Varialbe 'Test' is updated to" $updatedef.variables.assigned_to.value
 
-              displayName: 'Update Assigned To Variable'
-              env:
+            displayName: 'Update Assigned To Variable'
+            env:
                 SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
