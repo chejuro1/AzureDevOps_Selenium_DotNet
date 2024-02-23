@@ -86,43 +86,26 @@ stages:
                 echo $(Build.BuildUri)
                 echo $(Build.DefinitionVersion)
           - powershell: |
-              # Define the URL for the REST API to get the latest build
-              $buildsUrl = "https://dev.azure.com/cheindjou/poc/_apis/build/builds?definitions=2&$top=1&api-version=6.0"
+              $url = "https://dev.azure.com/cheindjou/poc/_apis/build/definitions/2?api-version=6.0"
 
-              # Define the URL for the REST API to update the variables
-              $updateUrl = "https://dev.azure.com/{organization}/{project}/_apis/build/builds/{buildId}/variables?api-version=6.0"
-
-              # Get the latest build ID
-              $latestBuild = Invoke-RestMethod -Uri $buildsUrl -Method Get -Headers @{
+              Write-Host "URL: $url"
+              $pipeline = Invoke-RestMethod -Uri $url -Headers @{
                   Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
-              } | Select-Object -ExpandProperty value
-
-              if ($latestBuild.Count -gt 0) {
-                  $latestBuildId = $latestBuild[0].id
-
-                  # Convert the value to JSON
-                  $newVariables = @{
-                      variables = @{
-                         assigned_to = @{
-                              value = "70"
-                          }
-                      }
-                  } | ConvertTo-Json
-
-                  # Make the PATCH request to update the variables of the latest build
-                  $response = Invoke-RestMethod -Uri ($updateUrl -replace "{buildId}", $latestBuildId) -Method Patch -Body $newVariables -ContentType "application/json" -Headers @{
-                      Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
-                  }
-
-                  # Check the response
-                  if ($response) {
-                      Write-Host "Variable updated successfully for the latest build."
-                  } else {
-                      Write-Host "Failed to update variable for the latest build."
-                  }
-              } else {
-                  Write-Host "No builds found for the specified pipeline."
               }
+              Write-Host"$pipeline"
+              Write-Host "Pipeline = $($pipeline | ConvertTo-Json -Depth 100)"
+
+              $pipeline.variables.assigned_to.value = "$Department"
+
+              ####****************** update the modified object **************************
+              $json = @($pipeline) | ConvertTo-Json -Depth 99
+
+
+              $updatedef = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"}
+
+              write-host "==========================================================" 
+              Write-host "The value of Varialbe 'Test' is updated to" $updatedef.variables.Test.value
+
               displayName: 'Update Assigned To Variable'
               env:
                 SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
