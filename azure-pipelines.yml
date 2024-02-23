@@ -106,12 +106,12 @@ stages:
               
               # Update the pipeline definition with the modified variable
               $updatedef = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{
-                  Authorization = "Bearer d6jyfttnay6bveca4c2fmcdylkhey7n2jx3rg52id7hgshuqvtsq"
+                  Authorization = "Basic ZDZqeWZ0dG5heTZidmVjYTRjMmZtY2R5bGtoZXk3bjJqeDNyZzUyaWQ3aGdzaHVxdnRzcQ=="
               }
               #Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
               # Print the updated value of the assigned_to variable
               Write-Host "The value of variable 'assigned_to' is updated to: $($updatedef.variables.assigned_to.value)"
               
               displayName: 'Update Assigned To Variable'
-              env:
-                SYSTEM_ACCESSTOKEN: "d6jyfttnay6bveca4c2fmcdylkhey7n2jx3rg52id7hgshuqvtsq"
+              #env:
+                # SYSTEM_ACCESSTOKEN: "d6jyfttnay6bveca4c2fmcdylkhey7n2jx3rg52id7hgshuqvtsq"
