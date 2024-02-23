@@ -15,9 +15,12 @@ variables:
 - name: System.Debug
   value: true
 parameters:
-  - name: jules
-    values:
-      - 
+- name: Jules # Required as first property.
+  displayName: jules # Human-readable name for the parameter.
+  type: string
+  default: string | parameters | [ parameters ]
+  values: 
+      
 
 stages:
   # - stage: CI
