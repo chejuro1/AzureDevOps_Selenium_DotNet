@@ -96,26 +96,36 @@ stages:
                 echo $(Build.BuildUri)
                 echo $(Build.DefinitionVersion)
           - powershell: |
-              $url = "https://dev.azure.com/cheindjou/poc/_apis/build/definitions/2?api-version=6.0"
-
-              Write-Host "URL: $url"
-              $pipeline = Invoke-RestMethod -Uri $url -Headers @{
+              $uniqueName = $env:Build_RequestedForEmail
+              Write-Host "The uniqueName of the user running the pipeline is: $uniqueName"
+              
+              # Get the URL of the pipeline
+              $url = ('{0}{1}/_apis/build/builds/84?api-version=6.0' -f $env:SYSTEM_TEAMFOUNDATIONSERVERURI, $env:SYSTEM_TEAMPROJECTID, $env:Build_BuildId)
+              
+               
+              Write-Host "Pipeline URL: $url"
+              
+              Write-Host "$env:SYSTEM_ACCESSTOKEN = $(System.AccessToken)"
+              # Get the pipeline definition
+              $pipeline = Invoke-RestMethod -Uri $url -Method Get -Headers @{
                   Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
               }
-             
               Write-Host "Pipeline = $($pipeline | ConvertTo-Json -Depth 100)"
-
-              $pipeline.variables.assigned_to.value = "$Department"
-
-              ####****************** update the modified object **************************
-              $json = @($pipeline) | ConvertTo-Json -Depth 99
-
-
-              $updatedef = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"}
-
-              write-host "==========================================================" 
-              Write-host "The value of Varialbe 'Test' is updated to" $updatedef.variables.assigned_to.value
-
+              Write-Host($pipeline)
+              # Update the assigned_to variable with the user's uniqueName
+              $pipeline.variables.assigned_to.value = $uniqueName
+              
+              # Convert to JSON for the request body
+              $json = $pipeline | ConvertTo-Json -Depth 99
+              
+              # Update the pipeline definition with the modified variable
+              $updatedef = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{
+                  Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
+              }
+              
+              # Print the updated value of the assigned_to variable
+              Write-Host "The value of variable 'assigned_to' is updated to: $($updatedef.variables.assigned_to.value)"
+              
             displayName: 'Update Assigned To Variable'
             env:
-                SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
+              SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
