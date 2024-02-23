@@ -12,7 +12,8 @@ variables:
 - group: token
 - name: assigned_to
   value: 
-    
+- name: System.Debug
+  value: true
 
 stages:
   # - stage: CI
