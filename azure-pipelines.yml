@@ -77,7 +77,7 @@ stages:
         steps:
           - powershell: |
               # Get the user running the pipeline
-              $uniqueName = $(Build.RequestedFor)
+              $uniqueName = "740"
               Write-Host "The uniqueName of the user running the pipeline is: $uniqueName"
              
               # Get the URL of the pipeline
