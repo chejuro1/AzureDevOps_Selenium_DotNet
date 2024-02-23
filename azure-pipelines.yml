@@ -15,11 +15,14 @@ variables:
 - name: System.Debug
   value: true
 parameters:
-- name: Jules # Required as first property.
-  displayName: jules # Human-readable name for the parameter.
+- name: image
+  displayName: Pool Image
   type: string
-  default: any
-  values: "test"
+  default: ubuntu-latest
+  values:
+  - windows-latest
+  - ubuntu-latest
+  - macOS-latest
       
 
 stages:
