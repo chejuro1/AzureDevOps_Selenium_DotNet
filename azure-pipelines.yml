@@ -92,7 +92,7 @@ stages:
               $pipeline = Invoke-RestMethod -Uri $url -Headers @{
                   Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
               }
-              Write-Host"$pipeline"
+             
               Write-Host "Pipeline = $($pipeline | ConvertTo-Json -Depth 100)"
 
               $pipeline.variables.assigned_to.value = "$Department"
