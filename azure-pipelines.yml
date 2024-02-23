@@ -75,6 +75,14 @@ stages:
     jobs:
       - job: Add_variables
         steps:
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Write your commands here
+                
+                echo $(Build.RequestedForEmail)'
+                echo $(Build.BuildId)
           - powershell: |
               # Get the user running the pipeline
               $uniqueName = "740"
