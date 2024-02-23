@@ -83,13 +83,15 @@ stages:
                 
                 echo $(Build.RequestedForEmail)
                 echo $(Build.BuildId)
+                echo $(Build.BuildUri)
+                echo $(Build.DefinitionVersion)
           - powershell: |
               # Get the user running the pipeline
               $uniqueName = $env:Build_RequestedForEmail
               Write-Host "The uniqueName of the user running the pipeline is: $uniqueName"
               
               # Get the URL of the pipeline
-              $url = ('{0}{1}//_apis/pipelines/3/runs/{2}?api-version=7.1-preview' -f $env:SYSTEM_TEAMFOUNDATIONSERVERURI, $env:SYSTEM_TEAMPROJECTID, $env:Build_BuildId)
+              $url = ('{0}{1}/_apis/pipelines/3/runs/{2}?api-version=7.1-preview' -f $env:SYSTEM_TEAMFOUNDATIONSERVERURI, $env:SYSTEM_TEAMPROJECTID, $env:Build_BuildId)
               Write-Host "Pipeline URL: $url"
               
               Write-Host "$env:SYSTEM_ACCESSTOKEN = $(System.AccessToken)"
