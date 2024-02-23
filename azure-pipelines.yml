@@ -91,7 +91,7 @@ stages:
               Write-Host "Pipeline = $($pipeline | ConvertTo-Json -Depth 100)"
               Write-Host($pipeline)
               # Update the assigned_to variable with the user's uniqueName
-              $pipeline.variables.assigned_to.value = "$uniqueName"
+              $pipeline.variables.assigned_to.value = $uniqueName
               
               # Convert to JSON for the request body
               $json = $pipeline | ConvertTo-Json -Depth 99
