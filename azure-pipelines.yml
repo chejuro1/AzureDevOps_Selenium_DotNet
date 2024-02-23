@@ -19,7 +19,7 @@ parameters:
   displayName: jules # Human-readable name for the parameter.
   type: string
   default: any
-  values: 
+  values: "test"
       
 
 stages:
