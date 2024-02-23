@@ -77,9 +77,9 @@ stages:
         steps:
           - powershell: |
               # Get the user running the pipeline
-              $uniqueName = $env:Build.RequestedForEmail
+              $uniqueName = $(Build.RequestedFor)
               Write-Host "The uniqueName of the user running the pipeline is: $uniqueName"
-              
+             
               # Get the URL of the pipeline
               $url = ('{0}{1}/_apis/build/builds/{2}?api-version=7.1-preview.7' -f $env:SYSTEM_TEAMFOUNDATIONSERVERURI, $env:SYSTEM_TEAMPROJECTID, $env:Build.BuildId)
               Write-Host "Pipeline URL: $url"
@@ -88,7 +88,8 @@ stages:
               $pipeline = Invoke-RestMethod -Uri $url -Method Get -Headers @{
                   Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
               }
-              
+              Write-Host "Pipeline = $($pipeline | ConvertTo-Json -Depth 100)"
+              Write-Host($pipeline)
               # Update the assigned_to variable with the user's uniqueName
               $pipeline.variables.assigned_to.value = "$uniqueName"
               
