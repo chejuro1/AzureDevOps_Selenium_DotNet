@@ -123,3 +123,6 @@ stages:
               } else {
                   Write-Host "No builds found for the specified pipeline."
               }
+              displayName: 'Update Assigned To Variable'
+              env:
+                SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
