@@ -9,61 +9,102 @@ pool:
   vmImage: windows-latest
 
 variables:
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+- name: assigned_to
+  value: 
+    
 
 stages:
-  - stage: CI
+  # - stage: CI
+  #   jobs:
+  #     - job: Build
+  #       steps:
+  #         - task: NuGetToolInstaller@1
+  #           inputs:
+  #             checkLatest: false
+
+  #         - task: NuGetCommand@2
+  #           displayName: NuGet v2 Restore
+
+  #         - task: DotNetCoreCLI@2
+  #           displayName: Restore
+  #           inputs:
+  #             command: restore
+  #             projects: '**/SeleniumTest.csproj'
+
+  #         - task: DotNetCoreCLI@2
+  #           displayName: Publish
+  #           inputs:
+  #             command: publish
+  #             publishWebProjects: false
+  #             projects: '**/SeleniumTest.csproj'
+  #             arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTest'
+  #             zipAfterPublish: false
+  #             modifyOutputPath: false
+
+  #         - task: PublishBuildArtifacts@1
+  #           displayName: 'Publish Artifact'
+  #           inputs:
+  #             PathtoPublish: '$(build.artifactstagingdirectory)'
+  #           condition: succeededOrFailed()
+
+  # - stage: QAC
+  #   jobs:
+  #     - job: RunTests
+  #       steps:
+  #         - task: DownloadBuildArtifacts@0
+  #           inputs:
+  #             buildType: 'current'
+  #             downloadType: 'single'
+  #             artifactName: 'drop'
+  #             downloadPath: '$(System.DefaultWorkingDirectory)/SeleniumTest'
+
+  #         - task: VSTest@2
+  #           displayName: 'Run Visual Studio Tests'
+  #           inputs:
+  #             testSelector: 'testAssemblies'
+  #             testAssemblyVer2: |
+  #               **\*SeleniumTest*.dll
+  #               !**\*TestAdapter.dll
+  #               !**\obj\**
+  #             searchFolder: '$(System.DefaultWorkingDirectory)/SeleniumTest'
+  #             codeCoverageEnabled: true
+  #             runInParallel: true
+  - stage: preprod
     jobs:
-      - job: Build
+      - job: Add_variables
         steps:
-          - task: NuGetToolInstaller@1
-            inputs:
-              checkLatest: false
-
-          - task: NuGetCommand@2
-            displayName: NuGet v2 Restore
-
-          - task: DotNetCoreCLI@2
-            displayName: Restore
-            inputs:
-              command: restore
-              projects: '**/SeleniumTest.csproj'
-
-          - task: DotNetCoreCLI@2
-            displayName: Publish
-            inputs:
-              command: publish
-              publishWebProjects: false
-              projects: '**/SeleniumTest.csproj'
-              arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTest'
-              zipAfterPublish: false
-              modifyOutputPath: false
-
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish Artifact'
-            inputs:
-              PathtoPublish: '$(build.artifactstagingdirectory)'
-            condition: succeededOrFailed()
-
-  - stage: qac
-    jobs:
-      - job: RunTests
-        steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop'
-              downloadPath: '$(System.DefaultWorkingDirectory)/SeleniumTest'
-
-          - task: VSTest@2
-            displayName: 'Run Visual Studio Tests'
-            inputs:
-              testSelector: 'testAssemblies'
-              testAssemblyVer2: |
-                **\*SeleniumTest*.dll
-                !**\*TestAdapter.dll
-                !**\obj\**
-              searchFolder: '$(System.DefaultWorkingDirectory)/SeleniumTest'
-              codeCoverageEnabled: true
-              runInParallel: true
+        
+          - powershell: |
+                $uniqueName = $($env:RELEASE_DEPLOYMENT_REQUESTEDFOREMAIL)
+                Write-Host "##vso[task.setvariable variable=ReleaseDeploymentRequestedForEmail;]$uniqueName"
+                
+                Write-Host "The uniqueName of the release is: $uniqueName"
+                
+                #################
+                Write-Host "The deployment requested email  is :  $($env:RELEASE_DEPLOYMENT_REQUESTEDFOREMAIL)"
+                
+                # Get the release URL
+                $url = ('{0}{1}/_apis/release/releases/{2}?api-version=7.1-preview.8' -f $($env:SYSTEM_TEAMFOUNDATIONSERVERURI), $($env:SYSTEM_TEAMPROJECTID), $($env:RELEASE_RELEASEID)  )
+                
+                
+                Write-Host "URL: $url"
+                $pipeline = Invoke-RestMethod -Uri $url -Method Get -Headers @{
+                    Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
+                }
+                Write-Host "Pipeline = $($pipeline | ConvertTo-Json -Depth 100)"
+                
+                # Update an existing variable named TestVar to its new value 2
+                $pipeline.variables.assigned_to.value = "$($env:RELEASE_DEPLOYMENT_REQUESTEDFOREMAIL)"
+                
+                ####****************** update the modified object **************************
+                $json = @($pipeline) | ConvertTo-Json -Depth 99
+                
+                $updatedef = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"}
+                
+                write-host "==========================================================" 
+                Write-host "The value of Varialbe 'ReleaseDeploymentRequestedForEmail' is updated to" $updatedef.variables.assigned_to.value
+                displayName: 'Access the uniqueName property from the release'
+                enabled: false
+                env:
+                  SYSTEM_ACCESSTOKEN: $(token)
+                      
