@@ -86,37 +86,40 @@ stages:
                 echo $(Build.BuildUri)
                 echo $(Build.DefinitionVersion)
           - powershell: |
-              # Get the user running the pipeline
-              $uniqueName = $env:Build_RequestedForEmail
-              Write-Host "The uniqueName of the user running the pipeline is: $uniqueName"
-              
-              # Get the URL of the pipeline
-              $url = ('{0}{1}/_apis/build/definitions/2?api-version=7.1-preview' -f $env:SYSTEM_TEAMFOUNDATIONSERVERURI, $env:SYSTEM_TEAMPROJECTID, $env:Build_BuildId)
-              
-               
-              Write-Host "Pipeline URL: $url"
-              
-              Write-Host "$env:SYSTEM_ACCESSTOKEN = $(System.AccessToken)"
-              # Get the pipeline definition
-              $pipeline = Invoke-RestMethod -Uri $url -Method Get -Headers @{
+              # Define the URL for the REST API to get the latest build
+              $buildsUrl = "https://dev.azure.com/cheindjou/poc/_apis/build/builds?definitions=2&$top=1&api-version=6.0"
+
+              # Define the URL for the REST API to update the variables
+              $updateUrl = "https://dev.azure.com/{organization}/{project}/_apis/build/builds/{buildId}/variables?api-version=6.0"
+
+              # Get the latest build ID
+              $latestBuild = Invoke-RestMethod -Uri $buildsUrl -Method Get -Headers @{
                   Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
+              } | Select-Object -ExpandProperty value
+
+              if ($latestBuild.Count -gt 0) {
+                  $latestBuildId = $latestBuild[0].id
+
+                  # Convert the value to JSON
+                  $newVariables = @{
+                      variables = @{
+                         assigned_to = @{
+                              value = "70"
+                          }
+                      }
+                  } | ConvertTo-Json
+
+                  # Make the PATCH request to update the variables of the latest build
+                  $response = Invoke-RestMethod -Uri ($updateUrl -replace "{buildId}", $latestBuildId) -Method Patch -Body $newVariables -ContentType "application/json" -Headers @{
+                      Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
+                  }
+
+                  # Check the response
+                  if ($response) {
+                      Write-Host "Variable updated successfully for the latest build."
+                  } else {
+                      Write-Host "Failed to update variable for the latest build."
+                  }
+              } else {
+                  Write-Host "No builds found for the specified pipeline."
               }
-              Write-Host "Pipeline = $($pipeline | ConvertTo-Json -Depth 100)"
-              Write-Host($pipeline)
-              # Update the assigned_to variable with the user's uniqueName
-              $pipeline.variables.assigned_to.value = $uniqueName
-              
-              # Convert to JSON for the request body
-              $json = $pipeline | ConvertTo-Json -Depth 99
-              
-              # Update the pipeline definition with the modified variable
-              $updatedef = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{
-                  Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
-              }
-              
-              # Print the updated value of the assigned_to variable
-              Write-Host "The value of variable 'assigned_to' is updated to: $($updatedef.variables.assigned_to.value)"
-              
-              displayName: 'Update Assigned To Variable'
-              env:
-                SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
