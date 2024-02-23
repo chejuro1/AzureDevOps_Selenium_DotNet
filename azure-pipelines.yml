@@ -18,7 +18,7 @@ parameters:
 - name: Jules # Required as first property.
   displayName: jules # Human-readable name for the parameter.
   type: string
-  default: string | parameters | [ parameters ]
+  default: ""
   values: 
       
 
