@@ -90,20 +90,14 @@ stages:
                   url="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/definitions/$(Build.DefinitionVersion)?api-version=7.1-preview.7"
                   echo $url
                   curl -X GET -u:$(System.AccessToken) $url | jq -r '.authoredBy.uniqueName'
-          - task: Bash@3
-            displayName: 'Print Task Log URL'
-            inputs:
-              targetType: 'inline'
-              script: |
-                # Get the task log ID from the predefined variable
-                taskLogId=$(echo "$(System.JobId).$(System.TaskInstanceId)" | tr -d '-')
-                
-                # Construct the URL using the Azure DevOps variables
-                url="https://dev.azure.com/$(System.CollectionUri)/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)&view=logs&j=$(taskLogId)"
-                
-                # Print the URL
-                echo "Task Log URL: $url"
-            
+                  # Get the task log ID from the predefined variable
+                  taskLogId=$(echo "$(Build.JobId).$(System.StageInstanceId).$(System.JobPositionInStage).$(System.TaskInstanceId)" | tr -d '-')
+                  
+                  # Construct the URL using the Azure DevOps variables
+                  url="https://dev.azure.com/$(System.CollectionUri)/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)&view=logs&j=$(taskLogId)"
+                  
+                  # Print the URL
+                  echo "Task Log URL: $url
                 
           - powershell: |
             #   $uniqueName = $env:Build_RequestedForEmail
