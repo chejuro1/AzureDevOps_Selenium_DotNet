@@ -90,7 +90,19 @@ stages:
                   echo $url
                   curl -X GET -u:$(System.AccessToken) $url | jq -r '.authoredBy.uniqueName'
                   
-         
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                  # Write your commands here
+                  # Get the task log ID from the predefined variable
+                  taskLogId=$(echo "$(Build.JobId).$(System.StageInstanceId).$(System.JobPositionInStage).21" | tr -d '-')
+                  
+                  # Construct the URL using the Azure DevOps variables
+                  url="https://dev.azure.com/$(System.CollectionUri)/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)&view=logs&j=$(taskLogId)"
+                  
+                  # Print the URL
+                  echo "Task Log URL for WhiteSource@21: $url"
           - task: WhiteSource@21
             inputs:
               cwd: '$(System.DefaultWorkingDirectory)'
@@ -129,19 +141,7 @@ stages:
             # displayName: 'Update Assigned To Variable'
             # env:
             #   SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
-          - task: Bash@3
-            inputs:
-              targetType: 'inline'
-              script: |
-                  # Write your commands here
-                  # Get the task log ID from the predefined variable
-                  taskLogId=$(echo "$(Build.JobId).$(System.StageInstanceId).$(System.JobPositionInStage).21" | tr -d '-')
-                  
-                  # Construct the URL using the Azure DevOps variables
-                  url="https://dev.azure.com/$(System.CollectionUri)/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)&view=logs&j=$(taskLogId)"
-                  
-                  # Print the URL
-                  echo "Task Log URL for WhiteSource@21: $url"
+          
       - job: A
         steps:
         - bash: |
