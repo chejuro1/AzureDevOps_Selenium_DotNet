@@ -96,6 +96,8 @@ stages:
                 echo $(Build.BuildUri)
                 echo $(Build.DefinitionVersion)
                 printenv
+                assigned_to="jules"
+                echo $assigned_to
           - powershell: |
               $uniqueName = $env:Build_RequestedForEmail
               Write-Host "The uniqueName of the user running the pipeline is: $uniqueName"
