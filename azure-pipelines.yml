@@ -130,3 +130,16 @@ stages:
           #   displayName: 'Update Assigned To Variable'
           #   env:
           #     SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
+      - job: A
+        steps:
+        - bash: |
+            echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]this is from job A"
+          name: passOutput
+
+      - job: B
+        dependsOn: A
+        variables:
+          myVarFromJobA: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
+        steps:
+        - bash: |
+          echo $(myVarFromJobA)
