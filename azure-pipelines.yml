@@ -12,8 +12,6 @@ variables:
 - group: token
 - name: assigned_to
   value: 
-- name: System.Debug
-  value: true
 parameters:
 - name: image
   displayName: Pool Image
