@@ -141,7 +141,7 @@ stages:
       - job: B
         dependsOn: A
         variables:
-          myVarFromJobA: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
+          assigned_to: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
         steps:
         - bash: |
-           echo $(myVarFromJobA)
+           echo $(assigned_to)
