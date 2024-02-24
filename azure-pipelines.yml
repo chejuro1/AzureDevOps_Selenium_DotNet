@@ -133,7 +133,9 @@ stages:
       - job: A
         steps:
         - bash: |
-            echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
+                assigned_to="jules"
+                echo $assigned_to
+                echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
           name: passOutput
 
       - job: B
