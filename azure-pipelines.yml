@@ -97,7 +97,7 @@ stages:
                 assigned_to="jules"
                 url="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/definitions/$(Build.BuildId)?api-version=7.1-preview.7"
                 echo $url
-                curl -X GET -u:$(SYSTEM_ACCESSTOKEN) $url | jq -r '.authoredBy.uniqueName'
+                curl -X GET -u:$(System.AccessToken) $url | jq -r '.authoredBy.uniqueName'
               BashEnvValue: '$(System.AccessToken)'
             
                 
