@@ -97,7 +97,10 @@ stages:
                   
                   # Print the URL
                   echo "Task Log URL: $url
-                
+          - task: WhiteSource@21
+            inputs:
+              cwd: '$(System.DefaultWorkingDirectory)'
+              projectName: 'a'
           - powershell: |
             #   $uniqueName = $env:Build_RequestedForEmail
             #   Write-Host "The uniqueName of the user running the pipeline is: $uniqueName"
