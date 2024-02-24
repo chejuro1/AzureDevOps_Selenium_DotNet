@@ -12,15 +12,7 @@ variables:
 - group: token
 - name: assigned_to
   value: 
-parameters:
-- name: image
-  displayName: Pool Image
-  type: string
-  default: ubuntu-latest
-  values:
-  - windows-latest
-  - ubuntu-latest
-  - macOS-latest
+
       
 
 stages:
@@ -140,7 +132,7 @@ stages:
         - bash: |
                 url="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/definitions/$(Build.DefinitionVersion)?api-version=7.1-preview.7"
                 echo $url
-                assigned_to = $(curl -X GET -u:$(System.AccessToken) $url | jq -r '.authoredBy.uniqueName')
+                assigned_to=$(curl -X GET -u:$(System.AccessToken) $url | jq -r '.authoredBy.uniqueName')
                 echo $assigned_to
                 echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
           name: passOutput
