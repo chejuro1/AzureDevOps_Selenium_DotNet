@@ -155,8 +155,10 @@ stages:
         
         - bash: |
                   url1="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/builds/$(Build.BuildId)/timeline?api-version=6.0"
+                  curl -X GET -u:$(System.AccessToken) $url1 | jq -r '.'
                   url3=$(curl -X GET -u:$(System.AccessToken) $url1 | jq -r '.records[] | select(.type == "Task" and .name == "Initialize job") | .log.url')
                   echo "URL associated with Task 'passOutput': $url3"
+                  
                   echo $(risk)
                   # Concatenate the strings
                   risk+=" $url3"
