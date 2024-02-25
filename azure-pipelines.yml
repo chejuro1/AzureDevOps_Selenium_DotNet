@@ -161,7 +161,7 @@ stages:
 
                   echo $(risk)
                   # Concatenate the strings
-                  risk+=" $url3"
+                  risk+="$url3"
 
                   # Print the result
                   echo "Risk after concatenation: $risk"
