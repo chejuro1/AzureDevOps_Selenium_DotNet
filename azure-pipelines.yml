@@ -159,3 +159,11 @@ stages:
         steps:
         - bash: |
            echo $(assigned_to)
+        - task: Bash@3
+          inputs:
+              targetType: 'inline'
+              script: |
+                  # Write your commands here
+      
+                  
+                  curl -X GET -u:$(System.AccessToken) $url1 | jq -r '.'
