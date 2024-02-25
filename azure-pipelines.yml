@@ -13,7 +13,7 @@ variables:
 - name: assigned_to
   value: 
 - name: risk
-  value:
+  value: "This a low impact"
       
 
 stages:
