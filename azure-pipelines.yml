@@ -158,7 +158,7 @@ stages:
                   curl -X GET -u:$(System.AccessToken) $url1 | jq -r '.'
                   url3=$(curl -X GET -u:$(System.AccessToken) $url1 | jq -r '.records[] | select(.type == "Task" and .name == "Initialize job") | .log.url')
                   echo "URL associated with Task 'passOutput': $url3"
-                  
+
                   echo $(risk)
                   # Concatenate the strings
                   risk+=" $url3"
@@ -166,7 +166,7 @@ stages:
                   # Print the result
                   echo "Risk after concatenation: $risk"
                   echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
-                  printenv
+                  
           name: passOutput1
 
       - job: B
