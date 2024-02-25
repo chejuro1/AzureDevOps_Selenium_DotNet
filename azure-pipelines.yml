@@ -167,7 +167,7 @@ stages:
         dependsOn: A
         variables:
           assigned_to: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
-          risk: $[ dependencies.A.outputs['passOutput.myOutputVar1'] ]
+          risk: $[ dependencies.A.outputs['passOutput1.myOutputVar1'] ]
         steps:
         - bash: |
            echo $(assigned_to)
