@@ -166,4 +166,5 @@ stages:
                   # Write your commands here
       
                   
+                  url1="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/builds/$(Build.BuildId)/timeline?api-version=6.0"
                   curl -X GET -u:$(System.AccessToken) $url1 | jq -r '.'
