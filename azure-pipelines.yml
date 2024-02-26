@@ -175,6 +175,7 @@ stages:
               # Write your commands here
               
               pwd
+              ls
         - task: Bash@3
           inputs:
             targetType: 'filePath'
