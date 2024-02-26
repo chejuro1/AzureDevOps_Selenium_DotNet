@@ -4,6 +4,12 @@ SYSTEM_TEAMPROJECTID="$2"
 Build_DefinitionVersion="$3"
 SYSTEM_ACCESSTOKEN="$4"
 Build_BuildId="$5"
+
+echo $STEM_TEAMFOUNDATIONSERVERURI
+echo $SYSTEM_TEAMPROJECTID
+echo $Build_DefinitionVersion
+echo $Build_BuildId
+
 url="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/definitions/$Build_DefinitionVersion?api-version=7.1-preview.7"
 echo "Definition URL: $url"
 
