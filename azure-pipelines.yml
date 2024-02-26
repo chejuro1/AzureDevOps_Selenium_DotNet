@@ -190,12 +190,11 @@ stages:
                 
                 pwd
                 ls 
+      
         - task: Bash@3
           inputs:
-            targetType: 'filePath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/scripts/addvariable.sh'
+            filePath: '$(System.DefaultWorkingDirectory)/scripts/addvariable.sh'
           name: passOutput
-        
     
       - job: B
         dependsOn: A
