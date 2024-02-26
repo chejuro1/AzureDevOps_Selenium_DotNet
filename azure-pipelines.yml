@@ -171,6 +171,7 @@ stages:
           name: passOutput1
 
       - job: B
+        pool: server
         dependsOn: A
         variables:
           assigned_to: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
