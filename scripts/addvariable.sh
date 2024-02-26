@@ -17,7 +17,7 @@ assigned_to=$(curl -X GET -u:$SYSTEM_ACCESSTOKEN $url | jq -r '.authoredBy.uniqu
 echo "Assigned To: $assigned_to"
 echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
 
-url1=$("$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/builds/$Build_BuildId}/timeline?api-version=6.0")
+url1=$("$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/builds/$Build_BuildId/timeline?api-version=6.0")
 curl -X GET -u:$SYSTEM_ACCESSTOKEN $url1 | jq -r '.'
 url3=$(curl -X GET -u:$SYSTEM_ACCESSTOKEN $url1 | jq -r '.records[] | select(.type == "Task" and .name == "Initialize job") | .log.url')
 echo "URL associated with Task 'passOutput': $url3"
