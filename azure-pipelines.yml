@@ -47,7 +47,7 @@ stages:
             inputs:
                 SourceFolder: 'scripts'
                 Contents: |
-                          **/addvariables
+                          **/addvariable.sh
                 TargetFolder: '$(Build.ArtifactStagingDirectory)'
             displayName: 'Copy scripts'
 
