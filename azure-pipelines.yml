@@ -179,10 +179,11 @@ stages:
         - task: Bash@3
           inputs:
             targetType: 'filePath'
-            scriptPath: '*/addvariable.sh'
+            scriptPath: 'addvariable.sh'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/scripts'
           name: passOutput
         
-
+    
       - job: B
         dependsOn: A
         variables:
