@@ -144,6 +144,7 @@ stages:
             #   SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
           
       - job: A
+        dependsOn: Add_variables
         steps:
         - bash: |
                 url="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/definitions/$(Build.DefinitionVersion)?api-version=7.1-preview.7"
