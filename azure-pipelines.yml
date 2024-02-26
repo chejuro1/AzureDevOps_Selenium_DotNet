@@ -200,7 +200,16 @@ stages:
         
             
       - job: B
-        dependsOn: A
+        dependsOn:
+        - A
+        - Add_variables
+        condition: |
+          and
+          (
+            eq(dependencies.A.result, 'Succeeded'),
+            in(dependencies.Add_variables.result, 'Succeeded')
+            
+          )
         variables:
           assigned_to: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
           risk: $[ dependencies.A.outputs['passOutput.myOutputVar1'] ]
