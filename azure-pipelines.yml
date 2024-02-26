@@ -192,8 +192,8 @@ stages:
         - task: Bash@3
           inputs:
             targetType: 'filePath'
-            scriptPath: 'addvariable.sh'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/'
+            scriptPath: './addvariable.sh'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
           name: passOutput
         
     
