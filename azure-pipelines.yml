@@ -179,7 +179,7 @@ stages:
         - task: Bash@3
           inputs:
             targetType: 'filePath'
-            scriptPath: 'scripts/addvariable.sh'
+            scriptPath: '*/addvariable.sh'
           name: passOutput
         
 
