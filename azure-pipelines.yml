@@ -93,7 +93,7 @@ stages:
                   echo $(Build.BuildId)
                   echo $(Build.BuildUri)
                   echo $(Build.DefinitionVersion)
-                 
+                  task
                   url="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/definitions/$(Build.DefinitionVersion)?api-version=7.1-preview.7"
                   echo $url
                   curl -X GET -u:$(System.AccessToken) $url | jq -r '.authoredBy.uniqueName'
