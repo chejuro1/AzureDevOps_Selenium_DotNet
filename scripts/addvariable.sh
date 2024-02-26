@@ -6,7 +6,7 @@ SYSTEM_TEAMPROJECTID="$2"
 Build_DefinitionVersion="$3"
 SYSTEM_ACCESSTOKEN="$4"
 Build_BuildId="$5"
-risk="$6"
+risk="${@:6}"
 
 echo "SYSTEM_TEAMFOUNDATIONSERVERURI: $SYSTEM_TEAMFOUNDATIONSERVERURI"
 echo "SYSTEM_TEAMPROJECTID: $SYSTEM_TEAMPROJECTID"
@@ -18,13 +18,13 @@ url="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/defin
 echo "Definition URL: $url"
 
 # Fetch the assigned user
-assigned_to=$(curl -X GET -u:${SYSTEM_ACCESSTOKEN} $url | jq -r '.authoredBy.uniqueName')
+assigned_to=$(curl -X -s GET -u:${SYSTEM_ACCESSTOKEN} $url | jq -r '.authoredBy.uniqueName')
 echo "Assigned To: $assigned_to"
 echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
 
 url1="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}/timeline?api-version=6.0"
 curl -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.'
-url3=$(curl -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.records[] | select(.type == "Task" and .name == "Initialize job") | .log.url')
+url3=$(curl -X  GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.records[] | select(.type == "Task" and .name == "Initialize job") | .log.url')
 echo "URL associated with Task 'passOutput': $url3"
 
 echo "Risk: $risk"
