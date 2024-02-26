@@ -10,6 +10,7 @@ echo $SYSTEM_TEAMPROJECTID
 echo $Build_DefinitionVersion
 echo $Build_BuildId
 echo $risk
+
 url="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/definitions/$Build_DefinitionVersion?api-version=7.1-preview.7"
 echo "Definition URL: $url"
 
