@@ -170,6 +170,13 @@ stages:
         #   name: passOutput
         - task: Bash@3
           inputs:
+            targetType: 'inline'
+            script: |
+              # Write your commands here
+              
+              pwd
+        - task: Bash@3
+          inputs:
             targetType: 'filePath'
             scriptPath: 'scripts/addvariable.sh'
           name: passOutput
