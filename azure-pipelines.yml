@@ -17,38 +17,45 @@ variables:
       
 
 stages:
-  # - stage: CI
-  #   jobs:
-  #     - job: Build
-  #       steps:
-  #         - task: NuGetToolInstaller@1
-  #           inputs:
-  #             checkLatest: false
+  - stage: CI
+    jobs:
+      - job: Build
+        steps:
+          # - task: NuGetToolInstaller@1
+          #   inputs:
+          #     checkLatest: false
 
-  #         - task: NuGetCommand@2
-  #           displayName: NuGet v2 Restore
+          # - task: NuGetCommand@2
+          #   displayName: NuGet v2 Restore
 
-  #         - task: DotNetCoreCLI@2
-  #           displayName: Restore
-  #           inputs:
-  #             command: restore
-  #             projects: '**/SeleniumTest.csproj'
+          # - task: DotNetCoreCLI@2
+          #   displayName: Restore
+          #   inputs:
+          #     command: restore
+          #     projects: '**/SeleniumTest.csproj'
 
-  #         - task: DotNetCoreCLI@2
-  #           displayName: Publish
-  #           inputs:
-  #             command: publish
-  #             publishWebProjects: false
-  #             projects: '**/SeleniumTest.csproj'
-  #             arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTest'
-  #             zipAfterPublish: false
-  #             modifyOutputPath: false
+          # - task: DotNetCoreCLI@2
+          #   displayName: Publish
+          #   inputs:
+          #     command: publish
+          #     publishWebProjects: false
+          #     projects: '**/SeleniumTest.csproj'
+          #     arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTest'
+          #     zipAfterPublish: false
+          #     modifyOutputPath: false
+          - task: CopyFiles@2
+            inputs:
+                SourceFolder: 'scripts'
+                Contents: |
+                          **/addvariable.sh
+                TargetFolder: '$(Build.ArtifactStagingDirectory)/'
+            displayName: 'Copy scripts'
 
-  #         - task: PublishBuildArtifacts@1
-  #           displayName: 'Publish Artifact'
-  #           inputs:
-  #             PathtoPublish: '$(build.artifactstagingdirectory)'
-  #           condition: succeededOrFailed()
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact'
+            inputs:
+              PathtoPublish: '$(build.artifactstagingdirectory)'
+            condition: succeededOrFailed()
 
   # - stage: QAC
   #   jobs:
@@ -168,21 +175,26 @@ stages:
         #         echo "Risk after concatenation: $risk"
         #         echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
         #   name: passOutput
+       
+        - task: DownloadBuildArtifacts@0
+          inputs:
+               buildType: 'current'
+               downloadType: 'single'
+               artifactName: 'drop'
+               downloadPath: '$(System.DefaultWorkingDirectory)'
         - task: Bash@3
           inputs:
-            targetType: 'inline'
-            script: |
-              # Write your commands here
-              
-              pwd
-              ls scripts
+              targetType: 'inline'
+              script: |
+                # Write your commands here
+                
+                pwd
+                ls 
+      
         - task: Bash@3
           inputs:
-            targetType: 'filePath'
-            scriptPath: '**/addvariable.sh'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/scripts'
+            filePath: '$(System.DefaultWorkingDirectory)/scripts/addvariable.sh'
           name: passOutput
-        
     
       - job: B
         dependsOn: A
