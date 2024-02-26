@@ -5,7 +5,7 @@
                 echo $assigned_to
                 echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
 
-
+                #######
                 url1="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/builds/$(Build.BuildId)/timeline?api-version=6.0"
                 curl -X GET -u:$(System.AccessToken) $url1 | jq -r '.'
                 url3=$(curl -X GET -u:$(System.AccessToken) $url1 | jq -r '.records[] | select(.type == "Task" and .name == "Initialize job") | .log.url')
@@ -19,3 +19,9 @@
                 # Print the result
                 echo "Risk after concatenation: $risk"
                 echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
+
+                #############
+                buildurl="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/builds/$(Build.BuildId)
+                echo "The release url is : $buildurl"
+                echo "##vso[task.setvariable variable=myOutputVar2;isoutput=true]$buildurl"
+
