@@ -191,9 +191,10 @@ stages:
         variables:
           assigned_to: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
           risk: $[ dependencies.A.outputs['passOutput.myOutputVar1'] ]
+          buildurl: $[ dependencies.A.outputs['passOutput.myOutputVar2'] ]
         steps:
         - bash: |
            echo $(assigned_to)
            echo $(risk)
-                  
+           echo $(buildurl)    
            
