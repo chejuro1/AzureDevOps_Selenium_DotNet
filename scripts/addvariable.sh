@@ -44,6 +44,10 @@ echo "Risk: $risk"
 # Concatenate the strings
 risk+=" '' 'The scan url:' $url3"
 
+###Get the veriable group 
+
+curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} 'https://dev.azure.com/cheindjou/poc/_apis/distributedtask/variablegroups?api-version=7.1-preview.2' | jq -r '.'
+
 # Print the result
 echo "Risk after concatenation: $risk"
 echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
