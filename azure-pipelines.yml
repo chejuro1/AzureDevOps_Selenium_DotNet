@@ -14,6 +14,8 @@ variables:
   value: 
 - name: risk
   value: "This a low impact."
+- name: other_pipeline_id
+  value: "1"
       
 
 stages:
@@ -194,7 +196,7 @@ stages:
         - task: Bash@3
           inputs:
             filePath: '$(System.DefaultWorkingDirectory)/scripts/addvariable.sh'
-            arguments: '$(System.TeamFoundationCollectionUri) $(System.TeamProject) $(Build.DefinitionVersion) $(System.AccessToken) $(Build.BuildId) $(risk)'
+            arguments: '$(System.TeamFoundationCollectionUri) $(System.TeamProject) $(Build.DefinitionVersion) $(System.AccessToken) $(Build.BuildId) $(risk) $(other_pipeline_id)'
 
           name: passOutput
         
