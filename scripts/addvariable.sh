@@ -58,7 +58,7 @@ curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYS
 group_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[] | select(.name == "Risk_url") | .id')
 
 if [ -z "$group_id" ]; then
-  echo "Failed to get the ID of the 'risk_url' variable group."
+  echo "Failed to get the ID of the 'Risk_url' variable group."
   exit 1
 fi
 
