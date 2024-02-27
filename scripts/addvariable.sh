@@ -23,7 +23,6 @@ echo "Assigned To: $assigned_to"
 echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
 
 # Get the latest build ID of another build pipeline
-other_pipeline_id=$other_pipeline_id
 branch="main"
 latest_build_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds?definitions=${other_pipeline_id}&branchName=${branch}&\$top=1&\$orderby=queueTimeDescending&api-version=6.0" | jq -r '.value[0].id')
 
@@ -33,6 +32,7 @@ if [ -z "$latest_build_id" ]; then
 fi
 
 url1="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${latest_build_id}/timeline?api-version=6.0"
+echo $url1
 curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.'
 url3=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.records[] | select(.type == "Task" and .name == "Initialize job") | .log.url')
 echo "URL associated with Task 'passOutput': $url3"
