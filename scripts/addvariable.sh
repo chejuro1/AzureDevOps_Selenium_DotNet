@@ -1,6 +1,3 @@
-I need to retrieve the logs from the task associated to another pipeline name aws_project in the same repo but using this current pipeline where I am running the script below 
-
-
 #!/bin/bash
 
 # Store arguments in descriptive variable names
@@ -44,9 +41,6 @@ echo "Risk: $risk"
 # Concatenate the strings
 risk+=" '' 'The scan url:' $url3"
 
-###Get the veriable group 
-
-curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} 'https://dev.azure.com/cheindjou/poc/_apis/distributedtask/variablegroups?api-version=7.1-preview.2' | jq -r '.'
 
 # Print the result
 echo "Risk after concatenation: $risk"
@@ -56,3 +50,18 @@ echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
 buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}&view=results"
 echo "The release URL is: $buildurl"
 echo "##vso[task.setvariable variable=myOutputVar2;isoutput=true]$buildurl"
+
+
+###Get the veriable group 
+# Get the ID of the variable group 'risk_url'
+group_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[] | select(.name == "risk_url") | .id')
+
+if [ -z "$group_id" ]; then
+  echo "Failed to get the ID of the 'risk_url' variable group."
+  exit 1
+fi
+
+# Update the variable 'risk_url1' with the value from your script
+new_value="some_new_value_from_your_script"
+echo "Updating variable 'risk_url1' with value: $new_value"
+echo "##vso[task.setvariable variable=risk_url1;issecret=false]$new_value"
