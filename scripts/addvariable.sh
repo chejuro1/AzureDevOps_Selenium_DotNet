@@ -30,7 +30,7 @@ if [ -z "$latest_build_id" ]; then
   echo "Failed to get the latest build ID of the other pipeline."
   exit 1
 fi
-# Get the url associated to the log task of AWS_projet build pipeline
+# Get the URL associated with the log task of the AWS_project build pipeline
 url1="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${latest_build_id}/timeline?api-version=6.0"
 echo $url1
 curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.'
@@ -46,23 +46,21 @@ risk+=" '' 'The scan url:' $url3"
 echo "Risk after concatenation: $risk"
 echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
 
-# Get the url of the current pipeline 
+# Get the URL of the current pipeline 
 buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}&view=results"
 echo "The release URL is: $buildurl"
 echo "##vso[task.setvariable variable=myOutputVar2;isoutput=true]$buildurl"
 
 
-###Get the veriable group 
-# Get the ID of the variable group 'risk_url'
-curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[]'
-group_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[] | select(.name == "Risk_url") | .id')
+### Get the variable group ID for 'risk_url'
+group_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[] | select(.name == "risk_url") | .id')
 
 if [ -z "$group_id" ]; then
-  echo "Failed to get the ID of the 'Risk_url' variable group."
+  echo "Failed to get the ID of the 'risk_url' variable group."
   exit 1
 fi
 
 # Update the variable 'risk_url1' with the value from your script
 new_value="some_new_value_from_your_script"
 echo "Updating variable 'risk_url1' with value: $new_value"
-echo "##vso[task.setvariable variable=risk_url1;issecret=false]$new_value"
+echo "##vso[task.setvariable variable=risk_url1;issecret=false;groupid=$group_id]$new_value"
