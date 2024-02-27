@@ -9,6 +9,16 @@ Write-Host "SYSTEM_TEAMPROJECTID: $SYSTEM_TEAMPROJECTID"
 
 # Get the variable group ID for 'Risk_url'
 $url = ('{0}{1}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2' -f $SYSTEM_TEAMFOUNDATIONSERVERURI, $SYSTEM_TEAMPROJECTID)
+
+# Get the pipeline definition
+$pipeline = Invoke-RestMethod -Uri $url -Method Get -Headers @{
+                  Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
+              }
+Write-Host "Pipeline = $($pipeline | ConvertTo-Json -Depth 100)"
+Write-Host($pipeline)
+# Update the assigned_to variable with the user's ameuniqueName
+# $pipeline.variables.assigned_to.value = "702"
+
 $response = Invoke-RestMethod -Uri $url -Headers @{Authorization = "Bearer $SYSTEM_ACCESSTOKEN"}
 $group_id = ($response.value | Where-Object { $_.name -eq "Risk_url" }).id
 
