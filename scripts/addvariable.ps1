@@ -37,6 +37,7 @@ $json_payload = @{
             isSecret = $false
             value = $new_value
         }
+    variableGroupProjectReferences = "POC"
     }
 } | ConvertTo-Json
 
