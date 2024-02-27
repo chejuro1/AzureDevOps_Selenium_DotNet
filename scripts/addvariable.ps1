@@ -37,6 +37,6 @@ Write-Host "Updating variable 'risk_url1' with value: $new_value"
 Write-Host "JSON Payload: $json_payload"
 
 # Make the PUT request to update the variable group
-Invoke-RestMethod -Uri "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups/${group_id}?api-version=7.1-preview.2" -Method Put -Body $json_payload -ContentType "application/json" -Headers @{
+Invoke-RestMethod -Uri $url -Method Put -Body $json_payload -ContentType "application/json" -Headers @{
                   Authorization = "Bearer $SYSTEM_ACCESSTOKEN"
                 }
