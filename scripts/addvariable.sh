@@ -6,8 +6,8 @@ SYSTEM_TEAMPROJECTID="$2"
 Build_DefinitionVersion="$3"
 SYSTEM_ACCESSTOKEN="$4"
 Build_BuildId="$5"
-risk="$6"
-
+risk="${@:6}"
+other_pipeline_id="$7"
 echo "SYSTEM_TEAMFOUNDATIONSERVERURI: $SYSTEM_TEAMFOUNDATIONSERVERURI"
 echo "SYSTEM_TEAMPROJECTID: $SYSTEM_TEAMPROJECTID"
 echo "Build_DefinitionVersion: $Build_DefinitionVersion"
@@ -23,7 +23,7 @@ echo "Assigned To: $assigned_to"
 echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
 
 # Get the latest build ID of another build pipeline
-other_pipeline_id="1"
+other_pipeline_id=$other_pipeline_id
 branch="main"
 latest_build_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds?definitions=${other_pipeline_id}&branchName=${branch}&\$top=1&\$orderby=queueTimeDescending&api-version=6.0" | jq -r '.value[0].id')
 
@@ -45,6 +45,6 @@ risk+=" '' 'The scan url:' $url3"
 echo "Risk after concatenation: $risk"
 echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
 
-buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${latest_build_id}"
+buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}"
 echo "The release URL is: $buildurl"
 echo "##vso[task.setvariable variable=myOutputVar2;isoutput=true]$buildurl"
