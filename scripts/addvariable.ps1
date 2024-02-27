@@ -35,4 +35,4 @@ Write-Host "JSON Payload: $json"
 
 # Make the PATCH request to update the variable group
 $patchUrl = "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups/${group_id}?api-version=7.1-preview.2"
-Invoke-RestMethod -Uri $patchUrl -Method Put -Body $json -ContentType "application/json" -Headers @{Authorization = "Bearer $SYSTEM_ACCESSTOKEN"}
+Invoke-RestMethod -Uri $patchUrl -Method Patch -Body $json -ContentType "application/json" -Headers @{Authorization = "Bearer $SYSTEM_ACCESSTOKEN"}
