@@ -124,7 +124,7 @@ stages:
                 
               # Get the URL of the pipeline
               #$url = ('{0}{1}//_apis/build/builds/120/timeline?api-version=6.0' -f $env:SYSTEM_TEAMFOUNDATIONSERVERURI, $env:SYSTEM_TEAMPROJECTID, $env:Build_BuildId)
-              $url = https://dev.azure.com/cheindjou/poc/_apis/distributedtask/variablegroups?api-version=7.1-preview.2
+              $url = 'https://dev.azure.com/cheindjou/poc/_apis/distributedtask/variablegroups?api-version=7.1-preview.2'
               Write-Host "Pipeline URL: $url"
               
               Write-Host "$env:SYSTEM_ACCESSTOKEN = $(System.AccessToken)"
