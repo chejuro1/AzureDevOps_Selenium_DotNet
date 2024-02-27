@@ -47,7 +47,8 @@ echo "Risk after concatenation: $risk"
 echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
 
 # Get the URL of the current pipeline 
-buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}&view=results"
+buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_build/results?buildId=${Build_BuildId}&view=results"
+
 echo "The release URL is: $buildurl"
 echo "##vso[task.setvariable variable=myOutputVar2;isoutput=true]$buildurl"
 
