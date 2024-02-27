@@ -13,8 +13,8 @@ $response = Invoke-RestMethod -Uri $url -Headers @{Authorization = "Bearer $SYST
 $group_id = ($response.value | Where-Object { $_.name -eq "Risk_url" }).id
 
 if (-not $group_id) {
-  Write-Host "Failed to get the ID of the 'Risk_url' variable group."
-  exit 1
+    Write-Host "Failed to get the ID of the 'Risk_url' variable group."
+    exit 1
 }
 
 # Update the variable 'risk_url1' in the 'Risk_url' variable group
@@ -22,9 +22,6 @@ $new_value = "https://dev.azure.com/cheindjou/poc/_build/results?buildId=215&vie
 
 # Construct the JSON payload for the update
 $json_payload = @{
-    id = $group_id
-    type = "Vsts"
-    name = "Risk_url"
     variables = @{
         risk_url1 = @{
             isSecret = $false
@@ -36,7 +33,6 @@ $json_payload = @{
 Write-Host "Updating variable 'risk_url1' with value: $new_value"
 Write-Host "JSON Payload: $json_payload"
 
-# Make the PUT request to update the variable group
-Invoke-RestMethod -Uri $url -Method Put -Body $json_payload -ContentType "application/json" -Headers @{
-                  Authorization = "Bearer $SYSTEM_ACCESSTOKEN"
-                }
+# Make the PATCH request to update the variable group
+$patchUrl = "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups/${group_id}?api-version=7.1-preview.2"
+Invoke-RestMethod -Uri $patchUrl -Method Patch -Body $json_payload -ContentType "application/json" -Headers @{Authorization = "Bearer $SYSTEM_ACCESSTOKEN"}
