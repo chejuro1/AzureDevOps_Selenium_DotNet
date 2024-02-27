@@ -30,10 +30,12 @@ if [ -z "$latest_build_id" ]; then
   echo "Failed to get the latest build ID of the other pipeline."
   exit 1
 fi
+
 # Get the URL associated with the log task of the AWS_project build pipeline
 url1="${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${latest_build_id}/timeline?api-version=6.0"
 echo $url1
 curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.'
+
 url3=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.records[] | select(.type == "Task" and .name == "Initialize job") | .log.url')
 echo "URL associated with Task 'passOutput': $url3"
 
@@ -54,7 +56,7 @@ echo "##vso[task.setvariable variable=myOutputVar2;isoutput=true]$buildurl"
 
 
 ### Get the variable group ID for 'Risk_url'
-group_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[] | select(.name == "Risk_url") | .id')
+group_id=$(curl -s -X GET -H "Authorization: Bearer $SYSTEM_ACCESSTOKEN" "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[] | select(.name == "Risk_url") | .id')
 
 if [ -z "$group_id" ]; then
   echo "Failed to get the ID of the 'Risk_url' variable group."
@@ -71,4 +73,4 @@ echo "Updating variable 'risk_url1' with value: $new_value"
 echo "JSON Payload: $json_payload"
 
 # Make the PUT request to update the variable group
-curl -s -X PUT -u:${SYSTEM_ACCESSTOKEN} -H "Content-Type: application/json" -d "${json_payload}" "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups/${group_id}?api-version=7.1-preview.2"
+curl -s -X PUT -H "Authorization: Bearer $SYSTEM_ACCESSTOKEN" -H "Content-Type: application/json" -d "${json_payload}" "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups/${group_id}?api-version=7.1-preview.2"
