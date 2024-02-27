@@ -1,3 +1,6 @@
+I need to retrieve the logs from the task associated to another pipeline name aws_project in the same repo but using this current pipeline where I am running the script below 
+
+
 #!/bin/bash
 
 # Store arguments in descriptive variable names
@@ -30,7 +33,7 @@ if [ -z "$latest_build_id" ]; then
   echo "Failed to get the latest build ID of the other pipeline."
   exit 1
 fi
-
+# Get the url associated to the log task of AWS_projet build pipeline
 url1="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${latest_build_id}/timeline?api-version=6.0"
 echo $url1
 curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.'
@@ -45,6 +48,7 @@ risk+=" '' 'The scan url:' $url3"
 echo "Risk after concatenation: $risk"
 echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
 
-buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}"
+# Get the url of the current pipeline 
+buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}&view=results"
 echo "The release URL is: $buildurl"
 echo "##vso[task.setvariable variable=myOutputVar2;isoutput=true]$buildurl"
