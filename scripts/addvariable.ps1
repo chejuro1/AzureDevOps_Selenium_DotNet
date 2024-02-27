@@ -21,7 +21,7 @@ Write-Host($pipeline)
 
 $response = Invoke-RestMethod -Uri $url -Headers @{Authorization = "Bearer $SYSTEM_ACCESSTOKEN"}
 $group_id = ($response.value | Where-Object { $_.name -eq "Risk_url" }).id
-
+Write-Host($group_id)
 if (-not $group_id) {
     Write-Host "Failed to get the ID of the 'Risk_url' variable group."
     exit 1
