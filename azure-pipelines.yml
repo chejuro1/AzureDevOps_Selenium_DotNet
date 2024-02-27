@@ -210,7 +210,8 @@ stages:
           inputs:
             filePath: '$(System.DefaultWorkingDirectory)/scripts/addvariable.ps1'
             arguments: '-SYSTEM_TEAMFOUNDATIONSERVERURI "$(System.TeamFoundationCollectionUri)" -SYSTEM_TEAMPROJECTID "$(System.TeamProject)" -SYSTEM_ACCESSTOKEN "$(System.AccessToken)"'
-
+          env:
+             SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
       - job: B
         dependsOn:
         - A
