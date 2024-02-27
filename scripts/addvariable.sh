@@ -54,7 +54,8 @@ echo "##vso[task.setvariable variable=myOutputVar2;isoutput=true]$buildurl"
 
 ###Get the veriable group 
 # Get the ID of the variable group 'risk_url'
-group_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[] | select(.name == "risk_url") | .id')
+curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[]
+group_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[] | select(.name == "risk_url1") | .id')
 
 if [ -z "$group_id" ]; then
   echo "Failed to get the ID of the 'risk_url' variable group."
