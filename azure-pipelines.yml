@@ -231,7 +231,5 @@ stages:
         steps:
         - bash: |
            echo $(assigned_to)
-           echo $(risk)
-           echo $(buildurl) 
            echo $(risk_url1)   
            
