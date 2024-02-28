@@ -72,7 +72,7 @@ json_payload='{"id":'${group_id}',
                             "name":"Risk_url",
                             "projectReference":
                                 {
-                                    "id":"8114bf9b-f774-405f-a6b0-f08f2faead2a"  
+                                    "id":"poc"  
                                 }
                         }
         ]}'
@@ -82,3 +82,4 @@ echo "JSON Payload: $json_payload"
 
 # Make the PUT request to update the variable group
 curl -s -X PUT -H "Authorization: Bearer $SYSTEM_ACCESSTOKEN" -H "Content-Type: application/json" -d "${json_payload}" "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups/${group_id}?api-version=7.1-preview.2"
+#8114bf9b-f774-405f-a6b0-f08f2faead2a
