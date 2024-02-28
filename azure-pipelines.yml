@@ -10,6 +10,7 @@ pool:
 
 variables:
 - group: token
+- group: Risk_url
 - name: assigned_to
   value: 
 - name: risk
@@ -231,5 +232,6 @@ stages:
         - bash: |
            echo $(assigned_to)
            echo $(risk)
-           echo $(buildurl)    
+           echo $(buildurl) 
+           echo $(risk_url1)   
            
