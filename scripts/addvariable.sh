@@ -30,7 +30,7 @@ url1="${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/build/build
 echo $url1
 curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.'
 
-url3=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.records[] | select(.type == "Task" and .name == "Initialize job") | .log.url')
+url3=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.records[] | select(.type == "Job" and .name == "Build") | .log.url')
 echo "URL associated with Task 'passOutput': $url3"
 
 echo "Risk: $risk"
