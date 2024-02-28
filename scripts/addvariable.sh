@@ -79,7 +79,7 @@ json_payload='{"id":'${group_id}',
                             "name":"Risk_url",
                             "projectReference":
                                 {
-                                    "id":"${SYSTEM_TEAMPROJECTID}"  
+                                    "id":"8114bf9b-f774-405f-a6b0-f08f2faead2a"  
                                 }
                         }
         ]}'
