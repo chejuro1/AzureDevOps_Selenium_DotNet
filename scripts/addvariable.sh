@@ -7,7 +7,7 @@ Build_DefinitionVersion="$3"
 SYSTEM_ACCESSTOKEN="$4"
 Build_BuildId="$5"
 risk="${@:6}"
-other_pipeline_id="$7"
+
 
 echo "SYSTEM_TEAMFOUNDATIONSERVERURI: $SYSTEM_TEAMFOUNDATIONSERVERURI"
 echo "SYSTEM_TEAMPROJECTID: $SYSTEM_TEAMPROJECTID"
