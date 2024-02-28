@@ -230,5 +230,5 @@ stages:
         steps:
         - bash: |
            echo $(assigned_to)
-           echo $(risk_url1)   
+           echo $(risk)   
            
