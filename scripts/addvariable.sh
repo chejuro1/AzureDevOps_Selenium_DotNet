@@ -58,7 +58,7 @@ if [ -z "$group_id" ]; then
 fi
 
 # Update the variable 'risk_url1' in the 'Risk_url' variable group
-new_value=$buildurl
+new_value=$risk
 
 # Construct the JSON payload for the update
 json_payload='{"id":'${group_id}',
