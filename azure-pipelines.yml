@@ -10,6 +10,7 @@ pool:
 
 variables:
 - group: token
+- group: Risk_url
 - name: assigned_to
   value: 
 - name: risk
