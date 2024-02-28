@@ -8,7 +8,6 @@ SYSTEM_ACCESSTOKEN="$4"
 Build_BuildId="$5"
 risk="${@:6}"
 
-
 echo "SYSTEM_TEAMFOUNDATIONSERVERURI: $SYSTEM_TEAMFOUNDATIONSERVERURI"
 echo "SYSTEM_TEAMPROJECTID: $SYSTEM_TEAMPROJECTID"
 echo "Build_DefinitionVersion: $Build_DefinitionVersion"
@@ -23,20 +22,18 @@ assigned_to=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url | jq -r '.authoredBy.
 echo "Assigned To: $assigned_to"
 echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
 
-
-
-# Get the URL associated with the log task of the  build pipeline
+# Get the URL associated with the log task of the build pipeline
 url1="${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}/timeline?api-version=6.0"
-echo $url1
-curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.'
+echo "Build Timeline URL: $url1"
+build_log=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1)
+echo $build_log | jq '.'
 
-url3=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.records[] | select(.type == "Task" and .name == ""PowerShell") | .log.url')
-echo "URL associated with Task 'passOutput': $url3"
+url3=$(echo $build_log | jq -r '.records[] | select(.type == "Task" and .name == "PowerShell") | .log.url')
+echo "URL associated with Task 'PowerShell': $url3"
 
 echo "Risk: $risk"
 # Concatenate the strings
-risk+=" '' 'The scan url:' $url3"
-
+risk+=" '' 'The scan URL:' $url3"
 
 # Print the result
 echo "Risk after concatenation: $risk"
@@ -44,12 +41,16 @@ echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
 
 # Get the URL of the current pipeline 
 buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_build/results?buildId=${Build_BuildId}&view=results"
-
 echo "The release URL is: $buildurl"
 echo "##vso[task.setvariable variable=myOutputVar2;isoutput=true]$buildurl"
 
+# Get the project ID
+project_url="${SYSTEM_TEAMFOUNDATIONSERVERURI}_apis/projects/${SYSTEM_TEAMPROJECTID}?api-version=7.1"
+project_response=$(curl -s -X GET -H "Authorization: Bearer $SYSTEM_ACCESSTOKEN" $project_url)
+project_id=$(echo $project_response | jq -r '.id')
+echo "Project ID: $project_id"
 
-### Get the variable group ID for 'Risk_url'
+# Get the variable group ID for 'Risk_url'
 group_id=$(curl -s -X GET -H "Authorization: Bearer $SYSTEM_ACCESSTOKEN" "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups?api-version=7.1-preview.2" | jq -r '.value[] | select(.name == "Risk_url") | .id')
 
 if [ -z "$group_id" ]; then
@@ -61,25 +62,28 @@ fi
 new_value=$risk
 
 # Construct the JSON payload for the update
-json_payload='{"id":'${group_id}',
-              "type":"Vsts",
-              "name":"Risk_url",
-              "variables":{"risk_url1":
-                            {"isSecret":false,
-                              "value":"'${new_value}'"}},
-              "variableGroupProjectReferences":[
-                        {
-                            "name":"Risk_url",
-                            "projectReference":
-                                {
-                                    "id":"8114bf9b-f774-405f-a6b0-f08f2faead2a"  
-                                }
-                        }
-        ]}'
+json_payload='{
+  "id":'${group_id}',
+  "type":"Vsts",
+  "name":"Risk_url",
+  "variables":{
+    "risk_url1":{
+      "isSecret":false,
+      "value":"'${new_value}'"
+    }
+  },
+  "variableGroupProjectReferences":[
+    {
+      "name":"Risk_url",
+      "projectReference":{
+        "id":"'$project_id'"
+      }
+    }
+  ]
+}'
 
 echo "Updating variable 'risk_url1' with value: $new_value"
 echo "JSON Payload: $json_payload"
 
 # Make the PUT request to update the variable group
 curl -s -X PUT -H "Authorization: Bearer $SYSTEM_ACCESSTOKEN" -H "Content-Type: application/json" -d "${json_payload}" "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/distributedtask/variablegroups/${group_id}?api-version=7.1-preview.2"
-#
