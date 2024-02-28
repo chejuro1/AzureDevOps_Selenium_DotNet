@@ -23,17 +23,10 @@ assigned_to=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url | jq -r '.authoredBy.
 echo "Assigned To: $assigned_to"
 echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
 
-# Get the latest build ID of another build pipeline
-branch="main"
-latest_build_id=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} "${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/build/builds?definitions=${other_pipeline_id}&branchName=${branch}&\$top=1&\$orderby=queueTimeDescending&api-version=6.0" | jq -r '.value[0].id')
 
-if [ -z "$latest_build_id" ]; then
-  echo "Failed to get the latest build ID of the other pipeline."
-  exit 1
-fi
 
-# Get the URL associated with the log task of the AWS_project build pipeline
-url1="${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${latest_build_id}/timeline?api-version=6.0"
+# Get the URL associated with the log task of the  build pipeline
+url1="${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}/timeline?api-version=6.0"
 echo $url1
 curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url1 | jq -r '.'
 
@@ -65,7 +58,7 @@ if [ -z "$group_id" ]; then
 fi
 
 # Update the variable 'risk_url1' in the 'Risk_url' variable group
-new_value="https://dev.azure.com/cheindjou/poc/_build/results?buildId=215&view=logs"
+new_value=$buildurl
 
 # Construct the JSON payload for the update
 json_payload='{"id":'${group_id}',
