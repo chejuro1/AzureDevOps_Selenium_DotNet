@@ -58,7 +58,7 @@ if [ -z "$group_id" ]; then
   exit 1
 fi
 
-# Update the variable 'risk_url1' in the 'Risk_url' variable group
+# Update the variable 'risk' in the 'Risk_url' variable group
 new_value=$risk
 
 # Construct the JSON payload for the update
@@ -67,7 +67,7 @@ json_payload='{
   "type":"Vsts",
   "name":"Risk_url",
   "variables":{
-    "risk_url1":{
+    "risk":{
       "isSecret":false,
       "value":"'${new_value}'"
     }
@@ -82,7 +82,7 @@ json_payload='{
   ]
 }'
 
-echo "Updating variable 'risk_url1' with value: $new_value"
+echo "Updating variable 'risk' with value: $new_value"
 echo "JSON Payload: $json_payload"
 
 # Make the PUT request to update the variable group
