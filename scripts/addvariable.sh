@@ -8,6 +8,7 @@ SYSTEM_ACCESSTOKEN="$4"
 Build_BuildId="$5"
 risk="${@:6}"
 other_pipeline_id="$7"
+
 echo "SYSTEM_TEAMFOUNDATIONSERVERURI: $SYSTEM_TEAMFOUNDATIONSERVERURI"
 echo "SYSTEM_TEAMPROJECTID: $SYSTEM_TEAMPROJECTID"
 echo "Build_DefinitionVersion: $Build_DefinitionVersion"
@@ -67,7 +68,21 @@ fi
 new_value="https://dev.azure.com/cheindjou/poc/_build/results?buildId=215&view=logs"
 
 # Construct the JSON payload for the update
-json_payload='{"id":'${group_id}',"type":"Vsts","name":"Risk_url","variables":{"risk_url1":{"isSecret":false,"value":"'${new_value}'"}}}'
+json_payload='{"id":'${group_id}',
+              "type":"Vsts",
+              "name":"Risk_url",
+              "variables":{"risk_url1":
+                            {"isSecret":false,
+                              "value":"'${new_value}'"}},
+              "variableGroupProjectReferences":[
+                        {
+                            "name":"Risk_url",
+                            "projectReference":
+                                {
+                                    "id":"${SYSTEM_TEAMPROJECTID}"  
+                                }
+                        }
+        ]}'
 
 echo "Updating variable 'risk_url1' with value: $new_value"
 echo "JSON Payload: $json_payload"
