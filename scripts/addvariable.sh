@@ -1,4 +1,4 @@
-#!/bin/bash
+##!/bin/bash
 
 # Store arguments in descriptive variable names
 SYSTEM_TEAMFOUNDATIONSERVERURI="$1"
@@ -6,13 +6,14 @@ SYSTEM_TEAMPROJECTID="$2"
 Build_DefinitionVersion="$3"
 SYSTEM_ACCESSTOKEN="$4"
 Build_BuildId="$5"
-risk="${@:6}"
-
+risk="$6"
+test-url="${@:7}"
 echo "SYSTEM_TEAMFOUNDATIONSERVERURI: $SYSTEM_TEAMFOUNDATIONSERVERURI"
 echo "SYSTEM_TEAMPROJECTID: $SYSTEM_TEAMPROJECTID"
 echo "Build_DefinitionVersion: $Build_DefinitionVersion"
 echo "Build_BuildId: $Build_BuildId"
 echo "risk: $risk"
+echo "test_url": $test_url
 
 url="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/definitions/${Build_DefinitionVersion}?api-version=7.1-preview.7"
 echo "Definition URL: $url"
