@@ -13,10 +13,9 @@ variables:
 - group: Risk_url
 - name: assigned_to
   value: 
-- name: risk
-  value: "This a low impact."
-- name: other_pipeline_id
-  value: "1"
+# - name: risk
+#   value: "This a low impact."
+
       
 
 stages:
@@ -231,5 +230,5 @@ stages:
         steps:
         - bash: |
            echo $(assigned_to)
-           echo $(risk_url1)   
+           echo $(risk)   
            
