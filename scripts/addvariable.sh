@@ -19,7 +19,7 @@ echo "test_url": $test_url
 urlx="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}?api-version=7.1-preview.7"
 echo "Definition URL: $urlx"
 
-curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $urlx 
+curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $urlx | jq -r '.'
 # Fetch the assigned user
 assigned_to=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $urlx | jq -r '.requestedBy.uniqueName')
 echo "Assigned To: $assigned_to"
