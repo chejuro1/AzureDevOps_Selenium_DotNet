@@ -15,11 +15,13 @@ echo "Build_BuildId: $Build_BuildId"
 echo "risk: $risk"
 echo "test_url": $test_url
 
-url="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/definitions/${Build_DefinitionVersion}?api-version=7.1-preview.7"
-echo "Definition URL: $url"
+#url="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/definitions/${Build_DefinitionVersion}?api-version=7.1-preview.7"
+urlx="${SYSTEM_TEAMFOUNDATIONSERVERURI}/${SYSTEM_TEAMPROJECTID}/_apis/build/builds/${Build_BuildId}?api-version=7.1-preview.7"
+echo "Definition URL: $urlx"
+
 
 # Fetch the assigned user
-assigned_to=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $url | jq -r '.authoredBy.uniqueName')
+assigned_to=$(curl -s -X GET -u:${SYSTEM_ACCESSTOKEN} $urlx | jq -r '.requestedBy.uniqueName')
 echo "Assigned To: $assigned_to"
 echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$assigned_to"
 
@@ -32,13 +34,13 @@ echo $build_log | jq '.'
 url3=$(echo $build_log | jq -r '.records[] | select(.type == "Task" and .name == "PowerShell") | .log.url')
 echo "URL associated with Task 'PowerShell': $url3"
 
-echo "Risk: $risk"
+echo "test_url: $test_url"
 # Concatenate the strings
-risk+=" '' 'The scan URL:' $url3"
+test_url+=" '' 'The scan URL:' $risk"
 
 # Print the result
-echo "Risk after concatenation: $risk"
-echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$risk"
+echo "Risk after concatenation: $test_url"
+echo "##vso[task.setvariable variable=myOutputVar1;isoutput=true]$test_url"
 
 # Get the URL of the current pipeline 
 buildurl="${SYSTEM_TEAMFOUNDATIONSERVERURI}${SYSTEM_TEAMPROJECTID}/_build/results?buildId=${Build_BuildId}&view=results"
@@ -60,7 +62,7 @@ if [ -z "$group_id" ]; then
 fi
 
 # Update the variable 'risk' in the 'Risk_url' variable group
-new_value=$risk
+new_value=$test_url
 
 # Construct the JSON payload for the update
 json_payload='{
