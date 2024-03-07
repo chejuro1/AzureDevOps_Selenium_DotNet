@@ -16,4 +16,5 @@ do
   else
     echo "Variable '$variable_name' has a value: ${!variable_name}"
   fi
+  
 done
