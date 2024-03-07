@@ -14,9 +14,9 @@ variables:
 - name: assigned_to
   value: 
 - name: A
-  value: "test1"
+  value: ""
 - name: B
-  value: "test2"
+  value: ""
 # - name: risk
 #   value: "This a low impact."
 
@@ -217,15 +217,15 @@ stages:
         #   env:
         #      SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
 
-        - script: |
-           
-              '$(System.DefaultWorkingDirectory)/scripts/check_variables.sh'
+   
+        - task: Bash@3
           displayName: 'Check if Variables are empty'
-          continueOnError: true  # Continue pipeline even if this script fails
+          inputs:
+            filePath: '$(System.DefaultWorkingDirectory)/scripts/check_variables.sh'
+            arguments: 'A B'
           env:
             A: $(A)
             B: $(B)
-            
       - job: B
         dependsOn:
         - A
