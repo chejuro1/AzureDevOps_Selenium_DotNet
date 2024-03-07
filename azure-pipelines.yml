@@ -14,7 +14,7 @@ variables:
 - name: assigned_to
   value: 
 - name: A
-  value: "test1"
+  value: ""
 - name: B
   value: ""
 # - name: risk
