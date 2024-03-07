@@ -16,7 +16,7 @@ variables:
 - name: A
   value: "test1"
 - name: B
-  value: "test2"
+  value: ""
 # - name: risk
 #   value: "This a low impact."
 
