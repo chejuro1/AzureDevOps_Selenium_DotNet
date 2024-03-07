@@ -212,6 +212,16 @@ stages:
         #     arguments: '-SYSTEM_TEAMFOUNDATIONSERVERURI "$(System.TeamFoundationCollectionUri)" -SYSTEM_TEAMPROJECTID "$(System.TeamProject)" -SYSTEM_ACCESSTOKEN "$(System.AccessToken)"'
         #   env:
         #      SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
+
+        - script: |
+           
+            './$(System.DefaultWorkingDirectory)/scripts/check_variables.sh'
+          displayName: 'Check if Variables are empty'
+          continueOnError: true  # Continue pipeline even if this script fails
+          env:
+            A: $(A)
+            B: $(B)
+            
       - job: B
         dependsOn:
         - A
