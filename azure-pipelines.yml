@@ -217,15 +217,14 @@ stages:
         #   env:
         #      SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
 
-        - script: |
-           
-              '$(System.DefaultWorkingDirectory)/scripts/check_variables.sh'
+   
+        - task: Bash@3
           displayName: 'Check if Variables are empty'
-          continueOnError: true  # Continue pipeline even if this script fails
+          inputs:
+            filePath: '$(System.DefaultWorkingDirectory)/scripts/check_variables.sh'
           env:
             A: $(A)
             B: $(B)
-            
       - job: B
         dependsOn:
         - A
