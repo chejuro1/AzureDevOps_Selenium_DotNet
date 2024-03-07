@@ -13,6 +13,10 @@ variables:
 - group: Risk_url
 - name: assigned_to
   value: 
+- name: A
+  value: "test1"
+- name: B
+  value: "test2"
 # - name: risk
 #   value: "This a low impact."
 
