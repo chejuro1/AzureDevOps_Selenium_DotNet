@@ -87,8 +87,11 @@ stages:
   #             runInParallel: true
   - stage: preprod
     jobs:
-      - job: Add_variables
-        steps:
+    - deployment: publishinternal
+      displayName: 'test'
+      environment: prd
+    - job: Add_variables
+      steps:
           - task: Bash@3
             inputs:
               targetType: 'inline'
@@ -156,9 +159,9 @@ stages:
             # env:
             #   SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
           
-      - job: A
-        dependsOn: Add_variables
-        steps:
+    - job: A
+      dependsOn: Add_variables
+      steps:
         # - bash: |
         #         url="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/definitions/$(Build.DefinitionVersion)?api-version=7.1-preview.7"
         #         echo $url
@@ -226,23 +229,23 @@ stages:
           env:
             A: $(A)
             B: $(B)
-      - job: B
-        dependsOn:
-        - A
-        - Add_variables
-        condition: |
+    - job: B
+      dependsOn:
+      - A
+      - Add_variables
+      condition: |
           and
           (
             eq(dependencies.A.result, 'Succeeded'),
             in(dependencies.Add_variables.result, 'Succeeded')
             
           )
-        variables:
+      variables:
           assigned_to: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
           risk: $[ dependencies.A.outputs['passOutput.myOutputVar1'] ]
           buildurl: $[ dependencies.A.outputs['passOutput.myOutputVar2'] ]
-        steps:
-        - bash: |
+      steps:
+      - bash: |
            echo $(assigned_to)
            echo $(risk)   
            
