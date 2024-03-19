@@ -97,7 +97,7 @@ stages:
               targetType: 'inline'
               script: |
                   # Write your commands here
-                  pip install request
+                
                   echo $(Build.RequestedForEmail)
                   echo $(Build.BuildId)
                   echo $(Build.BuildUri)
@@ -224,7 +224,7 @@ stages:
         - task: Bash@3
           displayName: 'Check if Variables are empty'
           inputs:
-            filePath: '$(System.DefaultWorkingDirectory)/scripts/check_variables.sh'
+            filePath: '$(System.DefaultWorkingDirectory)/scripts/check_variables.sh1'
             arguments: 'A B'
           env:
             A: $(A)
