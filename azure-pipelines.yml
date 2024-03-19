@@ -104,7 +104,7 @@ stages:
                   echo $(Build.DefinitionVersion)
                   pip install request
                   url="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/definitions/$(Build.DefinitionVersion)?api-version=7.1-preview.7"
-                  echo $url
+                  echo $ur
                   curl -X GET -u:$(System.AccessToken) $url | jq -r '.authoredBy.uniqueName'
                   url1="$SYSTEM_TEAMFOUNDATIONSERVERURI/$SYSTEM_TEAMPROJECTID/_apis/build/builds/$(Build.BuildId)/timeline?api-version=6.0"
                   curl -X GET -u:$(System.AccessToken) $url1 | jq -r '.'
