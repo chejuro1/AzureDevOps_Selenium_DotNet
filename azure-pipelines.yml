@@ -234,6 +234,7 @@ stages:
               pip install requests
               echo $(System.TeamFoundationCollectionUri)
               echo $(System.TeamProject) 
+              echo $(BUILD_BUILDID)
         - task: PythonScript@0
           inputs:
             scriptSource: 'filePath'
