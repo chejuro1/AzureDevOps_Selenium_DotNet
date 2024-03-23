@@ -220,7 +220,14 @@ stages:
         #   env:
         #      SYSTEM_ACCESSTOKEN:  $(System.AccessToken)
 
-   
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.12'
+            addToPath: true
+      
+        - script: |
+            python validate_pipeline_lease.py $(ADO_PAT) $(SYSTEM_COLLECTIONURI) $(SYSTEM_TEAMPROJECT) $(PIPELINE_DEFINITION_ID)
+          displayName: 'Run Python Script'
         - task: Bash@3
           displayName: 'Check if Variables are empty'
           inputs:
