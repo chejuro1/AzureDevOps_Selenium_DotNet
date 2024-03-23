@@ -232,6 +232,8 @@ stages:
               # Write your commands here
               
               pip install requests
+              echo $(System.TeamFoundationCollectionUri)
+              echo $(System.TeamProject) 
         - task: PythonScript@0
           inputs:
             scriptSource: 'filePath'
