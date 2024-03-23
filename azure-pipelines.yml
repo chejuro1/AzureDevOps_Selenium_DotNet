@@ -236,14 +236,14 @@ stages:
               echo $(System.TeamProject) 
               echo $(Build.BuildId)
         - task: PythonScript@0
-          displayName: Check the build retention
+          displayName: Check if test automation exist
           inputs:
             scriptSource: 'filePath'
             scriptPath: '$(System.DefaultWorkingDirectory)/scripts/check-testautomation.py'
             arguments: '$(System.AccessToken) $(System.TeamFoundationCollectionUri) $(System.TeamProject) $(Build.BuildId)'
 
         - task: PythonScript@0
-          displayName: Check if test automation exist
+          displayName: Check the build retention
           inputs:
               scriptSource: 'filePath'
               scriptPath: '$(System.DefaultWorkingDirectory)/scripts/validate_pipeline_lease.py'
