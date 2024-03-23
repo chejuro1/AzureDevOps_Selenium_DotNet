@@ -236,7 +236,7 @@ stages:
           inputs:
             scriptSource: 'filePath'
             scriptPath: '$(System.DefaultWorkingDirectory)/scripts/validate_pipeline_lease.py'
-            arguments: '$(System.AccessToken) $(SYSTEM_COLLECTIONURI) $(SYSTEM_TEAMPROJECT) $(PIPELINE_DEFINITION_ID)'
+            arguments: '$(System.AccessToken) $(System.TeamFoundationCollectionUri) $(System.TeamProject) $(PIPELINE_DEFINITION_ID)'
             
         - task: Bash@3
           displayName: 'Check if Variables are empty'
