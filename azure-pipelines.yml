@@ -243,7 +243,7 @@ stages:
         - task: Bash@3
           displayName: 'Check if Variables are empty'
           inputs:
-            filePath: '$(System.DefaultWorkingDirectory)/scripts/check_variables.sh1'
+            filePath: '$(System.DefaultWorkingDirectory)/scripts/check_variables.sh'
             arguments: 'A B'
           env:
             A: $(A)
