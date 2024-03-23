@@ -19,7 +19,8 @@ variables:
   value: "test"
 # - name: risk
 #   value: "This a low impact."
-
+- name: PIPELINE_DEFINITION_ID
+  value: "3"
       
 
 stages:
