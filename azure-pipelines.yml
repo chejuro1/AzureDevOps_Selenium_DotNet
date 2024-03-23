@@ -225,7 +225,13 @@ stages:
           inputs:
             versionSpec: '3.12'
             addToPath: true
-      
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your commands here
+              
+              pip install requests
         - task: PythonScript@0
           inputs:
             scriptSource: 'filePath'
