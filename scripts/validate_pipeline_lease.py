@@ -63,6 +63,7 @@ def print_lease_details(lease_details, build_id):
         print(f"Valid retention entry found for Build ID: {build_id}")
     else:
         print(f"No valid build retention entries found for Build ID: {build_id}")
+        print("Please retain the build and try again")
 
 def main():
     if len(sys.argv) < 4:
