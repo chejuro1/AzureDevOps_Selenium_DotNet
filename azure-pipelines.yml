@@ -234,12 +234,12 @@ stages:
               pip install requests
               echo $(System.TeamFoundationCollectionUri)
               echo $(System.TeamProject) 
-              echo $(BUILD_BUILDID)
+              echo $(Build.BuildId)
         - task: PythonScript@0
           inputs:
             scriptSource: 'filePath'
             scriptPath: '$(System.DefaultWorkingDirectory)/scripts/validate_pipeline_lease.py'
-            arguments: '$(System.AccessToken) $(System.TeamFoundationCollectionUri) $(System.TeamProject) $(PIPELINE_DEFINITION_ID)'
+            arguments: '$(System.AccessToken) $(System.TeamFoundationCollectionUri) $(System.TeamProject) $(Build.BuildId)'
             
         - task: Bash@3
           displayName: 'Check if Variables are empty'
