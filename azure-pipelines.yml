@@ -226,9 +226,12 @@ stages:
             versionSpec: '3.12'
             addToPath: true
       
-        - script: |
-            python validate_pipeline_lease.py $(ADO_PAT) $(SYSTEM_COLLECTIONURI) $(SYSTEM_TEAMPROJECT) $(PIPELINE_DEFINITION_ID)
-          displayName: 'Run Python Script'
+        - task: PythonScript@0
+          inputs:
+            scriptSource: 'filePath'
+            scriptPath: 'validate_pipeline_lease.py'
+            arguments: '$(System.AccessToken) $(SYSTEM_COLLECTIONURI) $(SYSTEM_TEAMPROJECT) $(PIPELINE_DEFINITION_ID)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/scripts'
         - task: Bash@3
           displayName: 'Check if Variables are empty'
           inputs:
