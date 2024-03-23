@@ -24,9 +24,11 @@ def check_build_retention(organization_url, project_name, build_id, ado_headers)
             print("Failed to get the build retention details.")
             print("Status Code:", retention_lease_response.status_code)
             print("Response:", retention_lease_response.text)
+            exit(1)  # Exit the script if unable to get retention details
     except Exception as e:
         print("An error occurred while checking build retention:")
         print(str(e))
+        exit(1)  # Exit the script if an error occurs
 
 def print_lease_details(lease_details, build_id):
     valid_entry_found = False
@@ -45,6 +47,7 @@ def print_lease_details(lease_details, build_id):
     else:
         print(f"No valid build retention entries found for Build ID: {build_id}")
         print("Please retain the build and try again")
+        exit(1)  # Exit the script if no valid retention entries found
 
 def main():
     if len(sys.argv) < 5:
@@ -61,4 +64,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
     
