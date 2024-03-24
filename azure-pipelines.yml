@@ -69,6 +69,9 @@ stages:
   - stage: QAC
     jobs:
       - job: RunTests
+        pool:
+          name: Azure Pipelines
+          vmImage: windows-latest
         steps:
           - task: DownloadBuildArtifacts@0
             inputs:
