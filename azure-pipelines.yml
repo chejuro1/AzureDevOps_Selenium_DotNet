@@ -66,31 +66,31 @@ stages:
               PathtoPublish: '$(build.artifactstagingdirectory)'
             condition: succeededOrFailed()
 
-  # - stage: QAC
-  #   jobs:
-  #     - job: RunTests
-  #       pool:
-  #         name: Azure Pipelines
-  #         vmImage: windows-latest
-  #       steps:
-  #         - task: DownloadBuildArtifacts@0
-  #           inputs:
-  #             buildType: 'current'
-  #             downloadType: 'single'
-  #             artifactName: 'drop'
-  #             downloadPath: '$(System.DefaultWorkingDirectory)/SeleniumTest'
+  - stage: QAC
+    jobs:
+      - job: RunTests
+        pool:
+          name: Azure Pipelines
+          vmImage: windows-latest
+        steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.DefaultWorkingDirectory)/SeleniumTest'
 
-  #         - task: VSTest@2
-  #           displayName: 'Run Visual Studio Tests'
-  #           inputs:
-  #             testSelector: 'testAssemblies'
-  #             testAssemblyVer2: |
-  #               **\*SeleniumTest*.dll
-  #               !**\*TestAdapter.dll
-  #               !**\obj\**
-  #             searchFolder: '$(System.DefaultWorkingDirectory)/SeleniumTest'
-  #             codeCoverageEnabled: true
-  #             runInParallel: true
+          - task: VSTest@2
+            displayName: 'Run Visual Studio Tests'
+            inputs:
+              testSelector: 'testAssemblies'
+              testAssemblyVer2: |
+                **\*SeleniumTest*.dll
+                !**\*TestAdapter.dll
+                !**\obj\**
+              searchFolder: '$(System.DefaultWorkingDirectory)/SeleniumTest'
+              codeCoverageEnabled: true
+              runInParallel: true
   - stage: preprod
     jobs:
     - deployment: publishinternal
