@@ -247,12 +247,7 @@ stages:
             scriptPath: '$(System.DefaultWorkingDirectory)/scripts/validate_pipeline_lease.py'
             arguments: '$(System.AccessToken) $(System.TeamFoundationCollectionUri) $(System.TeamProject) $(Build.BuildId)'
 
-        # - task: PythonScript@0
-        #   displayName: Check the build retention
-        #   inputs:
-        #       scriptSource: 'filePath'
-        #       scriptPath: '$(System.DefaultWorkingDirectory)/scripts/validate_pipeline_lease.py'
-        #       arguments: '$(System.AccessToken) $(System.TeamFoundationCollectionUri) $(System.TeamProject) $(Build.BuildId)'
+      
             
         - task: Bash@3
           displayName: 'Check if Variables are empty'
