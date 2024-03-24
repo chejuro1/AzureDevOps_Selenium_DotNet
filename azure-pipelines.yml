@@ -244,7 +244,7 @@ stages:
           displayName: Check if test automation and build retention exist
           inputs:
             scriptSource: 'filePath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/scripts/validate_build_retention_test_automation.py'
+            scriptPath: '$(System.DefaultWorkingDirectory)/scripts/validate_pipeline_lease.py'
             arguments: '$(System.AccessToken) $(System.TeamFoundationCollectionUri) $(System.TeamProject) $(Build.BuildId)'
 
         # - task: PythonScript@0
