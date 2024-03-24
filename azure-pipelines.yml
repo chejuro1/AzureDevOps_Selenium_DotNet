@@ -19,8 +19,7 @@ variables:
   value: "test"
 # - name: risk
 #   value: "This a low impact."
-- name: PIPELINE_DEFINITION_ID
-  value: "3"
+
       
 
 stages:
@@ -28,28 +27,31 @@ stages:
     jobs:
       - job: Build
         steps:
-          # - task: NuGetToolInstaller@1
-          #   inputs:
-          #     checkLatest: false
+          - task: NuGetToolInstaller@1
+            inputs:
+              checkLatest: false
 
-          # - task: NuGetCommand@2
-          #   displayName: NuGet v2 Restore
+          - task: NuGetCommand@2
+            displayName: NuGet v2 Restore
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '7.0.304'
+          - task: DotNetCoreCLI@2
+            displayName: Restore
+            inputs:
+              command: restore
+              projects: '**/SeleniumTest.csproj'
 
-          # - task: DotNetCoreCLI@2
-          #   displayName: Restore
-          #   inputs:
-          #     command: restore
-          #     projects: '**/SeleniumTest.csproj'
-
-          # - task: DotNetCoreCLI@2
-          #   displayName: Publish
-          #   inputs:
-          #     command: publish
-          #     publishWebProjects: false
-          #     projects: '**/SeleniumTest.csproj'
-          #     arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTest'
-          #     zipAfterPublish: false
-          #     modifyOutputPath: false
+          - task: DotNetCoreCLI@2
+            displayName: Publish
+            inputs:
+              command: publish
+              publishWebProjects: false
+              projects: '**/SeleniumTest.csproj'
+              arguments: '--configuration Release -o $(build.artifactstagingdirectory)/SeleniumTest'
+              zipAfterPublish: false
+              modifyOutputPath: false
           - task: CopyFiles@2
             inputs:
                 SourceFolder: 'scripts'
@@ -64,28 +66,31 @@ stages:
               PathtoPublish: '$(build.artifactstagingdirectory)'
             condition: succeededOrFailed()
 
-  # - stage: QAC
-  #   jobs:
-  #     - job: RunTests
-  #       steps:
-  #         - task: DownloadBuildArtifacts@0
-  #           inputs:
-  #             buildType: 'current'
-  #             downloadType: 'single'
-  #             artifactName: 'drop'
-  #             downloadPath: '$(System.DefaultWorkingDirectory)/SeleniumTest'
+  - stage: QAC
+    jobs:
+      - job: RunTests
+        pool:
+          name: Azure Pipelines
+          vmImage: windows-latest
+        steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.DefaultWorkingDirectory)/SeleniumTest'
 
-  #         - task: VSTest@2
-  #           displayName: 'Run Visual Studio Tests'
-  #           inputs:
-  #             testSelector: 'testAssemblies'
-  #             testAssemblyVer2: |
-  #               **\*SeleniumTest*.dll
-  #               !**\*TestAdapter.dll
-  #               !**\obj\**
-  #             searchFolder: '$(System.DefaultWorkingDirectory)/SeleniumTest'
-  #             codeCoverageEnabled: true
-  #             runInParallel: true
+          - task: VSTest@2
+            displayName: 'Run Visual Studio Tests'
+            inputs:
+              testSelector: 'testAssemblies'
+              testAssemblyVer2: |
+                **\*SeleniumTest*.dll
+                !**\*TestAdapter.dll
+                !**\obj\**
+              searchFolder: '$(System.DefaultWorkingDirectory)/SeleniumTest'
+              codeCoverageEnabled: true
+              runInParallel: true
   - stage: preprod
     jobs:
     - deployment: publishinternal
