@@ -33,7 +33,10 @@ stages:
 
           - task: NuGetCommand@2
             displayName: NuGet v2 Restore
-
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '7.0.304'
           - task: DotNetCoreCLI@2
             displayName: Restore
             inputs:
