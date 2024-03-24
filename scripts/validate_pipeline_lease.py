@@ -48,7 +48,24 @@ def print_lease_details(lease_details, build_id):
         print(f"No valid build retention entries found for Build ID: {build_id}")
         print("Please retain the build and try again")
         exit(1)  # Exit the script if no valid retention entries found
+##########  
+def check_test_automation(organization_url, project_name, build_id, ado_headers):
+    # Endpoint to get test runs associated with a build
+    get_test_runs_url = f'{organization_url}/{project_name}/_apis/test/runs?buildUri=vstfs:///Build/Build/{build_id}&$top=1&api-version=6.0'
 
+    try:
+        response = requests.get(get_test_runs_url, headers=ado_headers)
+        response.raise_for_status()
+        test_runs_data = response.json()
+
+        if 'value' in test_runs_data and test_runs_data['value']:
+            print("Test automation exists for the current build.")
+        else:
+            print("No test automation found for the current build.")
+    except Exception as e:
+        print("An error occurred while checking test automation:")
+        print(str(e))
+#######
 def main():
     if len(sys.argv) < 5:
         print("Usage: python script.py <ADO_PAT> <ORGANIZATION_URL> <PROJECT_NAME> <BUILD_ID>")
