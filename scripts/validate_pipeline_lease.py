@@ -62,6 +62,7 @@ def check_test_automation(organization_url, project_name, build_id, ado_headers)
             print("Test automation exists for the current build.")
         else:
             print("No test automation found for the current build.")
+            exit(1)  # Exit the script if no test automation entries found
     except Exception as e:
         print("An error occurred while checking test automation:")
         print(str(e))
@@ -78,6 +79,7 @@ def main():
 
     ado_headers = set_ado_headers(token)
     check_build_retention(organization_url, project_name, build_id, ado_headers)
+    check_test_automation(organization_url, project_name, build_id, ado_headers)
 
 if __name__ == "__main__":
     main()
