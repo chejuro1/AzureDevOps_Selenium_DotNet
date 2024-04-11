@@ -27,6 +27,14 @@ stages:
     jobs:
       - job: Build
         steps:
+          - task: Bash@3
+            inputs:
+             targetType: 'inline'
+             script: |
+               # Write your commands here
+               
+               echo 'Hello world'
+               ls 
           - task: PowerShell@2
             displayName: 'Update CSS with Background Color'
             inputs:
