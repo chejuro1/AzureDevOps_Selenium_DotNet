@@ -32,12 +32,12 @@ stages:
              targetType: 'inline'
              script: |
                # Write your commands here
-               
+               #!/bin/bash
                echo $(customBackgroundColor)
                ls 
   
                 # Get the desired background color from ADO variable
-                backgroundColor=$(customBackgroundColor)
+                backgroundColor = $(customBackgroundColor)
                 echo $backgroundColor
 
           - task: PowerShell@2
