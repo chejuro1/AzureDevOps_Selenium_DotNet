@@ -29,22 +29,34 @@ stages:
         steps:
           - task: Bash@3
             inputs:
-             targetType: 'inline'
-             script: |
-               # Write your commands here
-               #!/bin/bash
-               echo $(customBackgroundColor)
-               ls 
-               sed --help
-  
-                # Get the desired background color from ADO variable
-                backgroundColor="red"
-                echo $backgroundColor
+              targetType: 'inline'
+              script: |
+                #!/bin/bash
+                
+                # Print the value of customBackgroundColor variable
+                echo "Custom Background Color: $(customBackgroundColor)"
+
+                # List files in the directory for debugging purposes
+                ls 
+
+                # Display sed help for reference
+                sed --help
+
+                # Get the desired background color from the ADO variable
+                backgroundColor=$(customBackgroundColor)
+                echo "Desired Background Color: $backgroundColor"
+
+                # Escape special characters in the color value (optional)
+                backgroundColorEscaped=$(echo "$backgroundColor" | sed 's/[\/&]/\\&/g')
+
                 # Update the CSS file with the new background color
-                sed -i "s/var(--background-color):.*/var(--background-color): $backgroundColor;/" style.css
+                sed -i "s/var(--background-color):.*/var(--background-color): $backgroundColorEscaped;/" style.css
+
+                # Display the updated CSS file for verification
                 cat style.css
 
-                printenv 
+                # Print environment variables for debugging
+                printenv
 
 
           - task: PowerShell@2
