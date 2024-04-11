@@ -33,7 +33,7 @@ stages:
              script: |
                # Write your commands here
                
-               echo '$(customBackgroundColor)'
+               echo $(customBackgroundColor)
                ls 
   
                 # Get the desired background color from ADO variable
