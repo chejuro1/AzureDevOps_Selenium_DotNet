@@ -6,7 +6,7 @@ trigger:
 # you can replace this with Ubuntu too without changing the tasks
 pool:
   name: Azure Pipelines
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
 
 variables:
 - group: token
