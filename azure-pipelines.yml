@@ -39,28 +39,26 @@ stages:
                 Write-Output $env:SYSTEM_DEFAULTWORKINGDIRECTORY
                 #Get the desired background color from ADO variable
                 
-                $backgroundColor = "$Env:BUILD_CUSTOMBACKGROUND_COLOR"
+                $backgroundColor = "red"
                 Write-Output $backgroundColor
   
 
                 # Set the path to the style.css file
-                $stylesPath = "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\style.css"
+                $stylesPath = "$(Agent.BuildDirectory)\BookShop\style.css"
                 
                 # Get the desired background color from ADO variable
-                $backgroundColor = "red"
-                #$Env:BUILD_CUSTOMBACKGROUND_COLOR
-                # Update the CSS file with the new background color
-                (Get-Content $stylesPath) -replace 'var\(--background-color\):.*', "var(--background-color): $backgroundColor;" | Set-Content $stylesPath
+                #$backgroundColor = $Env:BUILD_CUSTOMBACKGROUND_COLOR
                 
-                # Copy the updated CSS file to the working directory
-                #Copy-Item -Path $stylesPath -Destination $(System.DefaultWorkingDirectory)
+                # Read the content of the CSS file
+                $cssContent = Get-Content $stylesPath -Raw
                 
-                # Display the content of the updated CSS file
-                Get-Content $(System.DefaultWorkingDirectory)\style.css
+                # Update the background color property
+                $updatedCssContent = $cssContent -replace '(?<=--background-color:\s*).*?(?=;)', $backgroundColor
+                
+                # Overwrite the CSS file with the updated content
+                Set-Content -Path $stylesPath -Value $updatedCssContent
 
 
-            env:
-              BUILD_CUSTOMBACKGROUND_COLO: $(customBackgroundColor)
           - task: NuGetToolInstaller@1
             inputs:
               checkLatest: false
