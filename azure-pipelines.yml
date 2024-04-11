@@ -27,6 +27,21 @@ stages:
     jobs:
       - job: Build
         steps:
+          - task: PowerShell@2
+            displayName: 'Update CSS with Background Color'
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Set the path to the style.css file
+                $stylesPath = "$(Agent.BuildDirectory)\style.css"
+                
+                # Get the desired background color from ADO variable
+                $backgroundColor = "$(customBackgroundColor)"
+                
+                # Update the CSS file with the new background color
+                (Get-Content $stylesPath) -replace 'var\(--background-color\):.*', "var(--background-color): $backgroundColor;" | Set-Content $stylesPath
+            env:
+              customBackgroundColor: $(customBackgroundColor)
           - task: NuGetToolInstaller@1
             inputs:
               checkLatest: false
