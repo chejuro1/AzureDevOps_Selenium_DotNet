@@ -44,7 +44,7 @@ stages:
   
 
                 # Set the path to the style.css file
-                $stylesPath = "$(Agent.BuildDirectory)\BookShop\style.css"
+                $stylesPath = "$(Agent.BuildDirectory)\style.css"
                 
                 # Get the desired background color from ADO variable
                 #$backgroundColor = $Env:BUILD_CUSTOMBACKGROUND_COLOR
