@@ -50,7 +50,7 @@ stages:
                 $cssContent = Get-Content $stylesPath -Raw
                 
                 # Update the background color property
-                $updatedCssContent = $cssContent -replace '(?<=--background-color:\s*).*?(?=;)', $backgroundColor
+                $updatedCssContent = $cssContent -replace '(?<=var(--background-color):\s*).*?(?=;)', $backgroundColor
                 
                 # Overwrite the CSS file with the updated content
                 Set-Content -Path $stylesPath -Value $updatedCssContent
