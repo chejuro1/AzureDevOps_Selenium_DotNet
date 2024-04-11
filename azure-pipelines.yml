@@ -38,11 +38,13 @@ stages:
                sed --help
   
                 # Get the desired background color from ADO variable
-                backgroundColor=$(customBackgroundColor)
+                backgroundColor="red"
                 echo $backgroundColor
                 # Update the CSS file with the new background color
                 sed -i "s/var(--background-color):.*/var(--background-color): $backgroundColor;/" style.css
                 cat style.css
+
+                printenv 
 
 
           - task: PowerShell@2
