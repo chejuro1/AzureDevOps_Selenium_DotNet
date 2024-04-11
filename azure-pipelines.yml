@@ -39,8 +39,7 @@ stages:
                 # List files in the directory for debugging purposes
                 ls 
 
-                # Display sed help for reference
-                sed --help
+             
 
                 # Get the desired background color from the ADO variable
                 backgroundColor=$(customBackgroundColor)
@@ -48,9 +47,9 @@ stages:
 
                 # Escape special characters in the color value (optional)
                 backgroundColorEscaped=$(echo "$backgroundColor" | sed 's/[\/&]/\\&/g')
-
+                echo $backgroundColorEscaped
                 # Update the CSS file with the new background color
-                sed -i "s/var(--background-color):.*/var(--background-color): $backgroundColorEscaped;/" style.css
+                sed -i 's/var(--background-color):.*/var(--background-color): red/' style.css
 
                 # Display the updated CSS file for verification
                 cat style.css
