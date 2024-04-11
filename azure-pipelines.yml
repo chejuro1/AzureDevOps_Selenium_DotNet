@@ -34,9 +34,10 @@ stages:
               script: |
                 # Set the path to the style.css file
                 dir 
-                $stylesPath = "$env:Agent_BuildDirectory\style.css"
-                
+                $stylesPath = "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\style.css"
+                 Write-Host($env:SYSTEM_DEFAULTWORKINGDIRECTORY)
                 # Get the desired background color from ADO variable
+                Write-Host($Env:BUILD_CUSTOMBACKGROUND_COLOR)
                 $backgroundColor = $Env:BUILD_CUSTOMBACKGROUND_COLOR
                 Write-Host($backgroundColor)
                 
