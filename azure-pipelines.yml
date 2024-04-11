@@ -37,7 +37,7 @@ stages:
                 $stylesPath = "$(Agent.BuildDirectory)\style.css"
                 
                 # Get the desired background color from ADO variable
-                $backgroundColor = $(customBackgroundColor)
+                $backgroundColor = "$(customBackgroundColor)"
                 Write-Host($backgroundColor)
                 
                 # Update the CSS file with the new background color
