@@ -98,6 +98,7 @@ stages:
       environment: prd
     - job: Add_variables
       steps:
+        
           - task: Bash@3
             inputs:
               targetType: 'inline'
@@ -271,5 +272,13 @@ stages:
       steps:
       - bash: |
            echo $(assigned_to)
-           echo $(risk)   
+           echo $(risk)
+    - job: C
+      pool: server 
+      steps:
+          
+      - task: ManualValidation@0
+        inputs:
+              notifyUsers: 'chejuro@yahoo.com'
+              instructions: '-add user'
            
