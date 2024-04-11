@@ -37,18 +37,30 @@ stages:
                 $stylesPath = "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\style.css"
                  
                 Write-Output $env:SYSTEM_DEFAULTWORKINGDIRECTORY
-                # Get the desired background color from ADO variable
-                Write-Host($Env:BUILD_CUSTOMBACKGROUND_COLOR)
+                #Get the desired background color from ADO variable
+                
                 $backgroundColor = "$Env:BUILD_CUSTOMBACKGROUND_COLOR"
                 Write-Output $backgroundColor
+  
+
+                # Set the path to the style.css file
+                $stylesPath = "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\style.css"
                 
-                
+                # Get the desired background color from ADO variable
+                $backgroundColor = "red"
+                #$Env:BUILD_CUSTOMBACKGROUND_COLOR
                 # Update the CSS file with the new background color
-                (Get-Content $stylesPath) -replace 'var(--background-color):.*', "var(--background-color): $backgroundColor;" | Set-Content $stylesPath
+                (Get-Content $stylesPath) -replace 'var\(--background-color\):.*', "var(--background-color): $backgroundColor;" | Set-Content $stylesPath
                 
-                Get-Content $stylesPath
+                # Copy the updated CSS file to the working directory
+                Copy-Item -Path $stylesPath -Destination $(System.DefaultWorkingDirectory)
+                
+                # Display the content of the updated CSS file
+                Get-Content $(System.DefaultWorkingDirectory)\style.css
+
+
             env:
-              customBackgroundColor: $(customBackgroundColor)
+              BUILD_CUSTOMBACKGROUND_COLO: $(customBackgroundColor)
           - task: NuGetToolInstaller@1
             inputs:
               checkLatest: false
