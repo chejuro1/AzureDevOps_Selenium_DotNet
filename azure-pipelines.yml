@@ -49,10 +49,10 @@ stages:
                 backgroundColorEscaped=$(echo "$backgroundColor" | sed 's/[\/&]/\\&/g')
                 echo $backgroundColorEscaped
                 # Update the CSS file with the new background color
-                sed -i 's/var(--background-color):.*/var(--background-color)=red/' style.css > style1.css
+                sed -i 's/var(--background-color)/red/' style.css
 
                 # Display the updated CSS file for verification
-                cat style1.css
+                cat style.css
 
                 # Print environment variables for debugging
                 printenv
