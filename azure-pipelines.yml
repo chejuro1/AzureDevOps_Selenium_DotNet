@@ -39,9 +39,9 @@ stages:
                 Write-Output $env:SYSTEM_DEFAULTWORKINGDIRECTORY
                 # Get the desired background color from ADO variable
                 Write-Host($Env:BUILD_CUSTOMBACKGROUND_COLOR)
-                $backgroundColor = $Env:BUILD_CUSTOMBACKGROUND_COLOR
-                 Write-Output $backgroundColor
-
+                $backgroundColor = "red"
+                Write-Output $backgroundColor
+                #$Env:BUILD_CUSTOMBACKGROUND_COLOR
                 
                 # Update the CSS file with the new background color
                 (Get-Content $stylesPath) -replace 'var\(--background-color\):.*', "var(--background-color): $backgroundColor;" | Set-Content $stylesPath
