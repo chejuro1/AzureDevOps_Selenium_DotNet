@@ -53,7 +53,7 @@ stages:
                 (Get-Content $stylesPath) -replace 'var\(--background-color\):.*', "var(--background-color): $backgroundColor;" | Set-Content $stylesPath
                 
                 # Copy the updated CSS file to the working directory
-                Copy-Item -Path $stylesPath -Destination $(System.DefaultWorkingDirectory)
+                #Copy-Item -Path $stylesPath -Destination $(System.DefaultWorkingDirectory)
                 
                 # Display the content of the updated CSS file
                 Get-Content $(System.DefaultWorkingDirectory)\style.css
