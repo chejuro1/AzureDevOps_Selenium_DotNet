@@ -17,8 +17,8 @@ variables:
   value: "test"
 - name: B
   value: "test"
-# - name: customBackgroundColor
-#   value: "blue"
+- group: customBackgroundColor
+
 
       
 
