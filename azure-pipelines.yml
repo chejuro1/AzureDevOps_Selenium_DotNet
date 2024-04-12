@@ -70,7 +70,7 @@ stages:
                 Write-Output $env:SYSTEM_DEFAULTWORKINGDIRECTORY
                 #Get the desired background color from ADO variable
                 
-                $backgroundColor = "red"
+                # $backgroundColor = "red"
                 Write-Output $backgroundColor
   
                 
