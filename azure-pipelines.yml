@@ -19,7 +19,7 @@ variables:
   value: "test"
 - group: customBackgroundColor
 - name: ismain
-  value: true
+  value: false
 
 
       
@@ -30,6 +30,7 @@ stages:
       - job: Build
         steps:
           - task: Bash@3
+            displayName: custum background
             condition: eq(variables.isMain, true)
             inputs:
               targetType: 'inline'
