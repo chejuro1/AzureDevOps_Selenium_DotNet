@@ -18,6 +18,8 @@ variables:
 - name: B
   value: "test"
 - group: customBackgroundColor
+- name: ismain
+  value: true
 
 
       
@@ -28,6 +30,7 @@ stages:
       - job: Build
         steps:
           - task: Bash@3
+            condition: eq(variables.isMain, true)
             inputs:
               targetType: 'inline'
               script: |
