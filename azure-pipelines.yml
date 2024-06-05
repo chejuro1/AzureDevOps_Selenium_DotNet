@@ -329,7 +329,16 @@ stages:
       - Add_variables
       condition: |
       
-            and(succeeded('A'), succeeded('Add_variables'))
+            and(
+                  succeeded('A'),
+                  succeeded('Add_variables'),
+                or(
+                  eq(variables.isMain, true),
+                  eq(variables.isMain, false)
+                 )
+               )
+        
+          
       variables:
           assigned_to: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]  
           risk: $[ dependencies.A.outputs['passOutput.myOutputVar1'] ]
